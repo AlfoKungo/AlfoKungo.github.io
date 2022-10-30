@@ -60,10 +60,13 @@ export default function Translate(props) {
     // set = set.sort(() => {return Math.random() -0.5;});
     return (
           <div className='translate'>
+            <h1></h1>
             { sets.length > 0 ? (
             <Ciicker terms={sets} in_line_delimeter={';'}/>
             ) :
-            ("Instuructions: Put a song in the top box, press 'copy', go to google translate and paste, take the output and put it in the bottom box")
+            (
+                <text>Instuructions:<br/>Put the song you wish to learn in the top box<br/>press 'copy' and paste the text (that's copied to the clipboard) in google translate<br/>take the output and put it in the bottom box</text>
+                )
             }
             <h1></h1>
              <textarea rows="20" cols="120"
