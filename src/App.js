@@ -1,10 +1,13 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
-function App() {
+import Translate from './questions/Translate'
+
+
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           I changed a lot <code>src/App.js</code> and save to reload.
@@ -17,7 +20,9 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+
+      </header> */}
+      <Translate />
     </div>
   );
 }

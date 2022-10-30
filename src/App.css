@@ -13,6 +13,8 @@
   }
 }
 
+
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -35,4 +37,228 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+body {
+  background-color: #f6f7fb;
+  caret-color: transparent;
+}
+
+.question-div{
+  margin: 0 auto;
+  background-color: white;
+  padding: 16px;
+  border-radius: 16px;
+  color: rgb(14, 11, 11);
+  box-shadow: rgba(50,50,93,0.25) 0px 30px 60px -12px,
+    rgba(0,0,0,0.3) 0px 18px 36x -18px;
+    box-shadow: 0.1rem 0.1rem 0.8rem #d7d7d7;
+    width: 80%;
+  height: auto;
+}
+.question-card{ 
+  /* margin: 0 auto; */
+
+  /* background-color: white; */
+/* 
+  padding: 16px;
+  border-radius: 16px;
+  color: rgb(14, 11, 11);
+  box-shadow: rgba(50,50,93,0.25) 0px 30px 60px -12px,
+    rgba(0,0,0,0.3) 0px 18px 36x -18px;
+    box-shadow: 0.1rem 0.1rem 0.8rem #d7d7d7;
+
+
+  width: 80%;
+  height: auto; */
+}
+.question-div h1{
+  font-size: 280%;
+}
+
+.write-question{ 
+  /* margin: 0 auto;
+
+  background-color: white;
+
+  padding: 16px;
+  border-radius: 16px;
+  color: rgb(49, 48, 75);
+  box-shadow: rgba(50,50,93,0.25) 0px 30px 60px -12px,
+    rgba(0,0,0,0.3) 0px 18px 36x -18px;
+    box-shadow: 0.1rem 0.1rem 0.8rem #d7d7d7;
+  
+
+
+  width: 80%;
+  height: auto; */
+}
+
+ul{
+  list-style: none;
+}
+
+.question-card li{
+  background-color: white;
+  padding: 16px;
+  border: 2px solid rgb(183, 183, 183);
+  border-radius: 20px; 
+  font-size: 32px;
+  font-weight: 500;
+  margin-top: 8px;
+  display: inline-block;
+    width: 95%;
+  /* transition: color 2s; */
+  cursor: pointer;
+  pointer-events: inherit;
+  /* vertical-align: top;  */
+  
+
+}
+
+.question-card ul {
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+  }
+
+
+.click-card ul {
+  columns: 5;
+  -webkit-columns: 5;
+  -moz-columns: 5;
+  
+}
+
+.click-card li{
+  background-color: white;
+  padding: 16px;
+  border: 2px solid rgb(183, 183, 183);
+  border-radius: 20px; 
+  font-size: 32px;
+  font-weight: 500;
+  margin-top: 8px;
+  display: inline-block;
+  width: 90%;
+  /* transition: color 0s; */
+  cursor: pointer;
+  pointer-events: inherit;
+
+}
+
+
+li:hover
+{
+  list-style-position:inside;
+  border: 2px solid rgb(33, 33, 33);
+}
+ .disabled-li:not(.nohover){
+  cursor: default;
+  border: 2px solid rgb(200, 200, 200);
+  color: rgb(200, 200, 200);
+  /* pointer-events: none; */
+}
+
+.clicker  li {
+  /* transition: color 1s;  */
+  /* cursor: default; */
+  transition:  3s;
+  color: white;
+  
+  border: 2px solid rgb(0,0,0);
+}
+.clicker li:hover
+{
+  list-style-position:inside;
+  border: 2px solid rgb(33, 33, 33);
+}
+
+.mc-right-answer:not(.nohover){
+  /* transition: color 1s;  */
+  cursor: default;
+  color: green;
+  border-color: green;
+}
+.mc-wrong-answer:not(.nohover){
+  /* transition: color 1s;  */
+  cursor: default;
+  color: red;
+  border-color: red;
+}
+
+.write-wrong-answer{
+  color: red;
+  border-color: red;
+}
+.write-right-answer{
+  color: green;
+  border-color: green;
+}
+/* li:hover.disabled-li
+{
+  list-style-position:inside;
+  border: 2px solid rgb(200, 200, 200);
+} */
+
+
+input{
+  /* display: block; */
+  margin: 0;
+  font-size: 2rem;
+  font: 32px/38px hurme_no2-webfont,-apple-system,BlinkMacSystemFont,sans-serif;
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.4rem;
+  /* appearance: none; */
+  background-color:#eeeeee;
+  /* box-shadow: 0.1rem 0.1rem 0.8rem #d7d7d7; */
+  border: none;
+
+  /* border-bottom: 1px solid rgb(0, 0, 0); */
+
+  
+  caret-color:auto;
+
+
+  cursor: text;
+  /* appearance: none; */
+  font-weight: 600;
+
+}
+
+input:focus
+{
+  background: 
+      linear-gradient(#000, #000) center bottom 5px /calc(100% - 15px) 2px no-repeat;
+      background-color:#eeeeee;
+      /* box-shadow: 0.1rem 0.1rem 0.3rem #7b9087; */
+    /* background: 
+      linear-gradient(#000, #000) center bottom 5px /calc(100% - 10px) 2px no-repeat; */
+  outline: none;
+}
+
+input::placeholder
+{ 
+  font:22px/28px hurme_no2-webfont,-apple-system,BlinkMacSystemFont,sans-serif;
+  color:rgb(154, 154, 154)
+}
+
+.i-was-right
+{
+  color: rgb(255, 255, 255);
+  background-color: rgb(117, 255, 142);
+  /* padding: 5% 5%; */
+    text-transform:uppercase;
+  border-radius: 6px;
+  /* color: rgb(14, 11, 11); */
+  /* position: absolute; */
+  /* top: 300px;  */
+  right: 200px;
+  box-shadow: rgba(50,50,93,0.25) 0px 30px 60px -12px,
+    rgba(0,0,0,0.3) 0px 18px 36x -18px;
+    /* box-shadow: 0.1rem 0.1rem 3.8rem #1d1c1c; */
+    width: 30%;
+    margin: 0 auto; /* center element horizontally */
+
+    text-align: center;
+  /* height: auto; */
 }
