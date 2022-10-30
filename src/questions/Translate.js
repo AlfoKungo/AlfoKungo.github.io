@@ -65,7 +65,7 @@ export default function Translate(props) {
             <Ciicker terms={sets} in_line_delimeter={';'}/>
             ) :
             (
-                <text>Instuructions:<br/>Put the song you wish to learn in the top box<br/>press 'copy' and paste the text (that's copied to the clipboard) in google translate<br/>take the output and put it in the bottom box</text>
+                <text>Instuructions:<br/>Put the song you wish to learn in the top box<br/>Press 'copy' and paste the text (that's copied to the clipboard) in google translate<br/>Take the output and put it in the bottom box</text>
                 )
             }
             <h1></h1>
