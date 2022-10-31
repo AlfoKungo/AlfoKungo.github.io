@@ -30,8 +30,8 @@ function updateSong(){
     lines = [];
     for (let i = 0 ; i < pre_lines.length ; i++){
         // console.log(Base.semi_clean_answer(pre_lines[i]).length);
-        if (Base.semi_clean_answer(pre_lines[i]).length > 1)
-            lines.push(Base.semi_clean_answer(pre_lines[i]));}
+        if (Base.semi_semi_clean_answer(pre_lines[i]).length > 1)
+            lines.push(Base.semi_semi_clean_answer(pre_lines[i]));}
     lines = Array.from(new Set(lines));
 
     song = song.replace(/(?:\r\n|\r|\n)/g, " ");

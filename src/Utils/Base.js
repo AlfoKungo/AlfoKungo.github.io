@@ -19,6 +19,12 @@ export function semi_clean_answer(answer)
 //   answer = answer.normalize("NFD").replace(/\p{Diacritic}/gu, "");
   return answer.trim().toLowerCase();
 }
+export function semi_semi_clean_answer(answer)
+{
+  answer = answer.replace(/ *\([^)]*\) */g, "").replace(/[.\/?#!$%\^&\*;:{}=\_`~()]/g,"").replace(/\s{2,}/g," ").replace(/-/g," ");;
+//   answer = answer.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+  return answer.trim().toLowerCase();
+}
 
 export function check_match(right_answer, input_answer)
 {
