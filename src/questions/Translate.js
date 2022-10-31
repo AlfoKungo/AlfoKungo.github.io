@@ -42,6 +42,8 @@ function updateSong(){
             words.push(Base.semi_clean_answer(pre_words[i]));}
     words = Array.from(new Set(words));
 
+    words = words.concat(lines);
+
     console.log(lines);
 }
 
@@ -52,9 +54,7 @@ function updateTranslation(words)
     console.log(twords);
 
     let set = [];
-    console.log(lines);
-    words = words.concat(lines);
-    console.log(words);
+
 
     for (let i = 0 ; i <twords.length -1 ; i++)
         set.push(words[i] + ";" +twords[i]);
@@ -87,7 +87,7 @@ export default function Translate(props) {
              onChange={handleMessageChange}
              ></textarea>
              <h1></h1>
-             <button onClick={() => {navigator.clipboard.writeText(words.join(".\n") + ".\n" + lines.join(".\n"))}}>Copy</button>
+             <button onClick={() => {navigator.clipboard.writeText(words.join(".\n"))}}>Copy</button>
              <h1></h1>
              <textarea rows="20" cols="120"
              onChange={(event) => {handleTranslation(event, words)}}
