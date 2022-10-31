@@ -6,6 +6,7 @@ import Ciicker from './Clicker'
 let song = "";
 let tsong = "";
 let words = "";
+let lines = "";
 // let set = [];
 let setSets_;
 
@@ -25,6 +26,14 @@ const handleTranslation = (event, words) => {
   };
 
 function updateSong(){
+    let pre_lines = song.split("\n");
+    lines = [];
+    for (let i = 0 ; i < pre_lines.length ; i++){
+        // console.log(Base.semi_clean_answer(pre_lines[i]).length);
+        if (Base.semi_clean_answer(pre_lines[i]).length > 1)
+            lines.push(Base.semi_clean_answer(pre_lines[i]));}
+    lines = Array.from(new Set(lines));
+
     song = song.replace(/(?:\r\n|\r|\n)/g, " ");
     let pre_words = song.split(" ");
     words = [];
@@ -32,7 +41,8 @@ function updateSong(){
         if (pre_words[i].length > 0)
             words.push(Base.semi_clean_answer(pre_words[i]));}
     words = Array.from(new Set(words));
-    console.log(words);
+
+    console.log(lines);
 }
 
 function updateTranslation(words)
@@ -42,6 +52,10 @@ function updateTranslation(words)
     console.log(twords);
 
     let set = [];
+    console.log(lines);
+    words = words.concat(lines);
+    console.log(words);
+
     for (let i = 0 ; i <twords.length -1 ; i++)
         set.push(words[i] + ";" +twords[i]);
     setSets_(set);
@@ -65,7 +79,7 @@ export default function Translate(props) {
             <Ciicker terms={sets} in_line_delimeter={';'}/>
             ) :
             (
-                <text>Instuructions:<br/>Put the song you wish to learn in the top box<br/>Press 'copy' and paste the text (that's copied to the clipboard) in google translate<br/>Take the output and put it in the bottom box</text>
+                <div>Instuructions:<br/>Put the song you wish to learn in the top box<br/>Press 'copy' and paste the text (that's copied to the clipboard) in google translate<br/>Take the output and put it in the bottom box</div>
                 )
             }
             <h1></h1>
@@ -73,7 +87,7 @@ export default function Translate(props) {
              onChange={handleMessageChange}
              ></textarea>
              <h1></h1>
-             <button onClick={() => {navigator.clipboard.writeText(words.join(".\n"))}}>Copy</button>
+             <button onClick={() => {navigator.clipboard.writeText(words.join(".\n") + ".\n" + lines.join(".\n"))}}>Copy</button>
              <h1></h1>
              <textarea rows="20" cols="120"
              onChange={(event) => {handleTranslation(event, words)}}

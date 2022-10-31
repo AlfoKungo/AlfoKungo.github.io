@@ -138,8 +138,9 @@ ul{
   font-size: 32px;
   font-weight: 500;
   margin-top: 8px;
-  display: inline-block;
-  width: 90%;
+  column-width: auto;
+  /* display: inline-block;
+  width: 90%; */
   /* transition: color 0s; */
   cursor: pointer;
   pointer-events: inherit;
