@@ -56,43 +56,11 @@ body {
     width: 80%;
   height: auto;
 }
-.question-card{ 
-  /* margin: 0 auto; */
-
-  /* background-color: white; */
-/* 
-  padding: 16px;
-  border-radius: 16px;
-  color: rgb(14, 11, 11);
-  box-shadow: rgba(50,50,93,0.25) 0px 30px 60px -12px,
-    rgba(0,0,0,0.3) 0px 18px 36x -18px;
-    box-shadow: 0.1rem 0.1rem 0.8rem #d7d7d7;
-
-
-  width: 80%;
-  height: auto; */
-}
 .question-div h1{
   font-size: 280%;
 }
 
-.write-question{ 
-  /* margin: 0 auto;
 
-  background-color: white;
-
-  padding: 16px;
-  border-radius: 16px;
-  color: rgb(49, 48, 75);
-  box-shadow: rgba(50,50,93,0.25) 0px 30px 60px -12px,
-    rgba(0,0,0,0.3) 0px 18px 36x -18px;
-    box-shadow: 0.1rem 0.1rem 0.8rem #d7d7d7;
-  
-
-
-  width: 80%;
-  height: auto; */
-}
 
 ul{
   list-style: none;
@@ -124,27 +92,49 @@ ul{
 
 
 .click-card ul {
-  columns: 5;
-  -webkit-columns: 5;
-  -moz-columns: 5;
+    display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      /* 5 equal columns */
+      grid-gap: 0px;
+      /* Optional gap between the items */
+      list-style: none;
+      /* Remove default list styling */
+      padding: 0;
+      /* Remove default padding */
+      margin: 0;
+      /* Remove default margin */
+        -webkit-user-select: none;
+          /* Safari */
+          -moz-user-select: none;
+          /* Firefox */
+          -ms-user-select: none;
+          /* IE/Edge */
+          user-select: none;
   
 }
 
 .click-card li{
+
   background-color: white;
-  padding: 16px;
+  padding: 10px;
   border: 2px solid rgb(183, 183, 183);
   border-radius: 20px; 
   font-size: 32px;
   font-weight: 500;
   margin-top: 8px;
+  margin-right: 8px;
   column-width: auto;
-  /* display: inline-block;
-  width: 90%; */
-  /* transition: color 0s; */
   cursor: pointer;
   pointer-events: inherit;
-
+  position: relative;
+}
+.clicker-level{
+  font-size: 45%;
+  padding: 0;
+  color: #94e3f9;
+  position: absolute;
+  top: -2px;
+  left: 50%;
 }
 
 
@@ -163,7 +153,7 @@ li:hover
 .clicker  li {
   /* transition: color 1s;  */
   /* cursor: default; */
-  transition:  3s;
+  transition:  8s;
   color: white;
   
   border: 2px solid rgb(0,0,0);
@@ -215,11 +205,7 @@ input{
   border: none;
 
   /* border-bottom: 1px solid rgb(0, 0, 0); */
-
-  
   caret-color:auto;
-
-
   cursor: text;
   /* appearance: none; */
   font-weight: 600;
