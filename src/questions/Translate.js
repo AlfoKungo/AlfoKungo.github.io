@@ -63,18 +63,42 @@ function updateTranslation(words) {
 }
 
 export default function Translate(props) {
-  // const [words, setWords] = useState("");
   const [sets, setSets] = useState("");
-
-  // setWords_ = setWords;
+  const [levels, setLevels] = useState({});
   setSets_ = setSets;
-
-  // set = set.sort(() => {return Math.random() -0.5;});
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      var content = reader.result;
+      const dic = content
+        .trim()
+        .split("\n")
+        .reduce((obj, line) => {
+          const [key, value] = line.split(":");
+          obj[key] = parseInt(value, 10); // Convert the value to an integer
+          return obj;
+        }, {});
+      setLevels(dic);
+      console.log("File uploaded successfully:", content);
+    };
+    reader.readAsText(file);
+  };
   return (
     <div className="translate">
       <h1></h1>
+      <label className="button">
+        Upload File
+        <input
+          type="file"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
+      </label>
       {sets.length > 0 ? (
-        <Ciicker terms={sets} in_line_delimeter={";"} />
+        <Ciicker terms={sets} levels={levels} in_line_delimeter={";"} />
       ) : (
         <div>
           Instuructions:

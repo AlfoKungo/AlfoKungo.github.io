@@ -28,7 +28,7 @@ export default function ClickerButton(props) {
   if (switch_sides) [que, ans] = [ans, que];
   const shadesOfGrey = [
     "#000000", // Black
-    "#606060", // Dark grey
+    "#404040", // Dark grey
     "#808080", // Grey
     "#B0B0B0", // Light grey
     "#D3D3D3", // Lighter grey
