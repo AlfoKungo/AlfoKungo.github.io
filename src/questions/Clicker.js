@@ -1,17 +1,31 @@
 import { useState } from "react";
 import ClickerButton from "./ClickerButton";
 
+export const FILE_SPLIT = "=".repeat(10);
+export const SONG_SPLIT = "-".repeat(5);
+export const NAME_SONG_SPLIT = ":".repeat(5);
+export const TERMS_SPLIT = ":::";
+
 export default function Clicker(props) {
+  console.log(props.terms);
   const LIMIT = 5;
+  const extra_songs = props.extra_songs ? props.extra_songs : "";
   let p_levels = new Array(props.terms.length).fill(0);
+  console.log("dd3: ", props.levels);
+
   props.terms.map((value, index) => {
-    let key = value.split(";\n")[0].split(";")[0];
+    let key = value.split(";\n")[0].split(";")[0].replace("\n", "");
+    console.log("dd1: ", key);
+    console.log("dd2: ", props.levels[key]);
+    // console.log("dd1: ", value, key);
     if (key in props.levels) p_levels[index] = props.levels[key];
   });
   console.log("pp", p_levels);
   const [terms, setTerms] = useState(props.terms);
   const [levels, setLevels] = useState(p_levels);
   const [l_index, setLIndex] = useState(0);
+  const [song_name, setSongName] = useState("");
+  const show_save = props.show_save;
 
   let cards = [];
   for (let i = 0; i < terms.length; i++) {
@@ -51,9 +65,19 @@ export default function Clicker(props) {
       return obj;
     }, {});
     console.log("sss:", ss);
-    const text = Object.entries({ ...props.levels, ...ss })
+    let text = Object.entries({ ...props.levels, ...ss })
       .map(([key, value]) => `${key}:${value}`)
       .join("\n");
+    text += "\n" + FILE_SPLIT;
+    if (song_name !== "") {
+      console.log("inside", terms);
+      text += "\n" + "Name: " + song_name;
+      text += "\n" + NAME_SONG_SPLIT + "\n";
+      text += terms.join(TERMS_SPLIT);
+      text += "\n" + SONG_SPLIT;
+    }
+    text += extra_songs;
+    console.log(extra_songs);
     const file = new Blob([text], {
       type: "text/plain",
     });
@@ -65,7 +89,21 @@ export default function Clicker(props) {
 
   return (
     <div>
-      <button onClick={downloadTxtFile}>Download txt</button>
+      {show_save ? (
+        <input
+          type="text"
+          className="song-name"
+          value={song_name}
+          onChange={(event) => {
+            setSongName(event.target.value);
+          }}
+        ></input>
+      ) : (
+        <div></div>
+      )}
+      <button className="save-save" onClick={downloadTxtFile}>
+        Download txt
+      </button>
 
       <div className="click-card" onKeyDown={onKeyPress} tabIndex="0">
         <ul>

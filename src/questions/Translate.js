@@ -1,7 +1,12 @@
 // import {song, tsong} from "../Variable"
 import { useState } from "react";
 import * as Base from "../Utils/Base";
-import Ciicker from "./Clicker";
+import Ciicker, {
+  FILE_SPLIT,
+  SONG_SPLIT,
+  NAME_SONG_SPLIT,
+  TERMS_SPLIT,
+} from "./Clicker";
 
 let song = "";
 let tsong = "";
@@ -11,16 +16,10 @@ let lines = "";
 let setSets_;
 
 const handleMessageChange = (event) => {
-  // 👇️ update textarea value
-  // setMessage(event.target.value);
-  // console.log(event.target.value);
   song = event.target.value;
   updateSong();
 };
 const handleTranslation = (event, words) => {
-  // 👇️ update textarea value
-  // setMessage(event.target.value);
-  // console.log(event.target.value);
   tsong = event.target.value;
   updateTranslation(words);
 };
@@ -29,7 +28,6 @@ function updateSong() {
   let pre_lines = song.split("\n");
   lines = [];
   for (let i = 0; i < pre_lines.length; i++) {
-    // console.log(Base.semi_clean_answer(pre_lines[i]).length);
     if (Base.semi_semi_clean_answer(pre_lines[i]).length > 1)
       lines.push(Base.semi_semi_clean_answer(pre_lines[i]));
   }
@@ -65,7 +63,29 @@ function updateTranslation(words) {
 export default function Translate(props) {
   const [sets, setSets] = useState("");
   const [levels, setLevels] = useState({});
+  const [extra_songs, setExtraSongs] = useState("");
+  const [extra_songs_raw, setExtraSongsRaw] = useState("");
+  const [show_save, setShowSave] = useState(true);
   setSets_ = setSets;
+  const handleSongChosen = (key) => {
+    setSets(extra_songs[key].split(TERMS_SPLIT));
+    setShowSave(false);
+  };
+  const handleExtraSongs = (extra) => {
+    setExtraSongsRaw(extra);
+
+    if (extra && extra.includes(SONG_SPLIT)) {
+      let pairs = extra.split(SONG_SPLIT);
+      const songs = {};
+      pairs.forEach((pair) => {
+        const [key, value] = pair.split(NAME_SONG_SPLIT);
+        if (key !== "\n") songs[key.replace("Name: ", "")] = value;
+      });
+      console.log(songs);
+      setExtraSongs(songs);
+    }
+  };
+
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
@@ -73,32 +93,45 @@ export default function Translate(props) {
     const reader = new FileReader();
     reader.onload = function (e) {
       var content = reader.result;
+      handleExtraSongs(content.split(FILE_SPLIT, 2)[1]);
+      content = content.split(FILE_SPLIT, 2)[0];
       const dic = content
         .trim()
         .split("\n")
         .reduce((obj, line) => {
           const [key, value] = line.split(":");
-          obj[key] = parseInt(value, 10); // Convert the value to an integer
+          obj[key.replace("\n", "")] = parseInt(value, 10); // Convert the value to an integer
           return obj;
         }, {});
       setLevels(dic);
-      console.log("File uploaded successfully:", content);
+      // console.log("File uploaded successfully:", content);
     };
     reader.readAsText(file);
   };
   return (
     <div className="translate">
       <h1></h1>
-      <label className="button">
-        Upload File
-        <input
-          type="file"
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
-      </label>
+      {Object.keys(levels).length === 0 ? (
+        <label className="button">
+          Upload File
+          <input
+            type="file"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+        </label>
+      ) : (
+        <div>Save is loaded</div>
+      )}
+
       {sets.length > 0 ? (
-        <Ciicker terms={sets} levels={levels} in_line_delimeter={";"} />
+        <Ciicker
+          terms={sets}
+          levels={levels}
+          extra_songs={extra_songs_raw}
+          show_save={show_save}
+          in_line_delimeter={";"}
+        />
       ) : (
         <div>
           Instuructions:
@@ -112,6 +145,17 @@ export default function Translate(props) {
         </div>
       )}
       <h1></h1>
+      <div id="songs-names-container">
+        {Object.keys(extra_songs).map((key) => (
+          <div
+            className="song-name-box"
+            key={key}
+            onClick={() => handleSongChosen(key)}
+          >
+            {key}
+          </div>
+        ))}
+      </div>
       <textarea rows="20" cols="120" onChange={handleMessageChange}></textarea>
       <h1></h1>
       <button
