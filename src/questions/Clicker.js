@@ -89,19 +89,32 @@ export default function Clicker(props) {
 
   return (
     <div>
+      <div class="tooltip-container">
+        <button class="question-mark-button">?</button>
+        <div class="tooltip-content">
+          After pressing on a box, you can press <b>+</b> or <b>-</b> to
+          increase or reduce the level of knowledge of a word
+        </div>
+      </div>
       {show_save ? (
-        <input
-          type="text"
-          className="song-name"
-          value={song_name}
-          onChange={(event) => {
-            setSongName(event.target.value);
-          }}
-        ></input>
+        <div className="input-container">
+          <input
+            type="text"
+            className="input-box"
+            // className="song-name"
+            value={song_name}
+            onChange={(event) => {
+              setSongName(event.target.value);
+            }}
+          ></input>
+          <div className="tooltip-text">
+            Add a <b>name</b> to save the current text in the save file
+          </div>
+        </div>
       ) : (
         <div></div>
       )}
-      <button className="save-save" onClick={downloadTxtFile}>
+      <button className="button-pretty-1" onClick={downloadTxtFile}>
         Download txt
       </button>
 
@@ -116,6 +129,7 @@ export default function Clicker(props) {
                 key={card}
                 level={levels[index]}
                 onClick={(e) => {
+                  e.preventDefault();
                   setLIndex(index);
                   if (e.metaKey) increaseLevel(index);
                   if (e.altKey && levels[index] > 0) reduceLevel(l_index);

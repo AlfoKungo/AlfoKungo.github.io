@@ -64,9 +64,11 @@ body {
 
 ul{
   list-style: none;
+  outline: none;
 }
 
 .question-card li{
+  outline: none;
   background-color: white;
   padding: 16px;
   border: 2px solid rgb(183, 183, 183);
@@ -110,6 +112,7 @@ ul{
           -ms-user-select: none;
           /* IE/Edge */
           user-select: none;
+    
   
 }
 
@@ -127,6 +130,7 @@ ul{
   cursor: pointer;
   pointer-events: inherit;
   position: relative;
+  outline: none;
 }
 .clicker-level{
   font-size: 45%;
@@ -136,7 +140,9 @@ ul{
   top: -2px;
   left: 50%;
 }
-
+.click-card {
+  outline: none;
+}
 
 li:hover
 {
@@ -250,26 +256,7 @@ input::placeholder
   /* height: auto; */
 }
 
-input.song-name {
-  width: 40%;
-  padding: 6px 10px;
-  margin: 8px 10px;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  font-size: 22px;
-  background-color: #f9f9f9;
-  transition: border-color 0.3s ease;
-}
 
-input.song-name:hover {
-  border-color: #888;
-}
-
-input.song-name:focus {
-  border-color: #4a90e2;
-  outline: none;
-}
 
 button.save-save {
     background-color: #4a90e2;
@@ -328,4 +315,185 @@ button.save-save:disabled {
 .song-name-box:hover {
     background-color: #357abd;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS */
+.button-pretty-1 {
+  appearance: button;
+  background-color: #1899D6;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: din-round, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  line-height: 20px;
+  margin: 10px;
+  margin-top: -1px;
+  outline: none;
+  overflow: visible;
+  padding: 13px 16px;
+  text-align: center;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  /* width: 100%; */
+}
+
+.button-pretty-1:after {
+  background-clip: padding-box;
+  background-color: #1CB0F6;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  bottom: -4px;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.button-pretty-1:main,
+.button-pretty-1:focus {
+  user-select: auto;
+}
+
+.button-pretty-1:hover:not(:disabled) {
+  filter: brightness(1.1);
+  -webkit-filter: brightness(1.1);
+}
+
+.button-pretty-1:disabled {
+  cursor: auto;
+}
+
+
+.tooltip-container {
+  z-index: 1000;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}
+
+.question-mark-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  padding: 5px 10px;
+  cursor: help;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tooltip-content {
+  visibility: hidden;
+  width: 200px;
+  background-color: #f9f9f9;
+  color: #333;
+  text-align: center;
+  font-weight:600;
+  border: 1px solid #71b6c9;
+  border-radius: 5px;
+  padding: 10px;
+  position: absolute;
+  top: 40px;
+  /* Positioning below the button */
+  left: 10px;
+  /* Align with the left side of the button */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-content b{
+  font-weight: bolder;
+}
+
+.tooltip-container:hover .tooltip-content {
+  visibility: visible;
+  opacity: 1;
+}
+
+.input-container {
+  position: relative;
+  width: 400px;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+input.input-box:hover {
+  border-color: #888;
+}
+
+input.input-box:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+.input-box {
+  width: 100%;
+    padding: 6px 10px;
+    margin: 8px 10px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 22px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+
+    padding: 10px;
+}
+.input-box:focus{
+  border-color: #469efd;
+    background-color: hsla(200, 100%, 99%, 0.715);
+    outline: none;
+  }
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background-color: #e6f7ff;
+  color: #007BFF;
+  padding: 10px;
+  border: 1px solid #99c2ff;
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px rgba(0, 123, 255, 0.1);
+  white-space: nowrap;
+  font-size: 18px;
+}
+
+.input-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+.random-logo {
+  filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(315deg) brightness(106%) contrast(107%);
+  width: 27px;
+  height: 27px;
+  vertical-align: middle;
+  margin-left: 8px;
+  margin-right: 5px;
+    position: relative;
+      top: -1px;
+}
+
+.random-button {
+  display: flex;
+    align-items: center;
 }

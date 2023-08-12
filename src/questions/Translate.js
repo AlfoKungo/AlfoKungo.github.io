@@ -1,6 +1,6 @@
 // import {song, tsong} from "../Variable"
 import { useState } from "react";
-import * as Base from "../Utils/Base";
+import { updateSong, updateTranslation } from "./ProcessSong";
 import Ciicker, {
   FILE_SPLIT,
   SONG_SPLIT,
@@ -8,57 +8,15 @@ import Ciicker, {
   TERMS_SPLIT,
 } from "./Clicker";
 
-let song = "";
-let tsong = "";
-let words = "";
-let lines = "";
-// let set = [];
+let to_copy = "";
 let setSets_;
 
 const handleMessageChange = (event) => {
-  song = event.target.value;
-  updateSong();
+  to_copy = updateSong(event.target.value);
 };
-const handleTranslation = (event, words) => {
-  tsong = event.target.value;
-  updateTranslation(words);
+const handleTranslation = (event) => {
+  setSets_(updateTranslation(to_copy, event.target.value));
 };
-
-function updateSong() {
-  let pre_lines = song.split("\n");
-  lines = [];
-  for (let i = 0; i < pre_lines.length; i++) {
-    if (Base.semi_semi_clean_answer(pre_lines[i]).length > 1)
-      lines.push(Base.semi_semi_clean_answer(pre_lines[i]));
-  }
-  lines = Array.from(new Set(lines));
-
-  song = song.replace(/(?:\r\n|\r|\n)/g, " ");
-  let pre_words = song.split(" ");
-  words = [];
-  for (let i = 0; i < pre_words.length; i++) {
-    if (pre_words[i].length > 0)
-      words.push(Base.semi_clean_answer(pre_words[i]));
-  }
-  words = Array.from(new Set(words));
-
-  words = words.concat(lines);
-
-  console.log(lines);
-}
-
-function updateTranslation(words) {
-  console.log(words);
-  let twords = tsong.split(".");
-  console.log(twords);
-
-  let set = [];
-
-  for (let i = 0; i < twords.length - 1; i++)
-    set.push(words[i] + ";" + twords[i]);
-  setSets_(set);
-  // console.log(set);
-}
 
 export default function Translate(props) {
   const [sets, setSets] = useState("");
@@ -69,7 +27,28 @@ export default function Translate(props) {
   setSets_ = setSets;
   const handleSongChosen = (key) => {
     setSets(extra_songs[key].split(TERMS_SPLIT));
+    console.log("ss: ", extra_songs[key].split(TERMS_SPLIT));
     setShowSave(false);
+  };
+  const handleRandomWords = () => {
+    const keysWithDesiredValues = Object.keys(levels).filter(
+      (key) => levels[key] === 0 || levels[key] === 1 || levels[key] === 2
+    );
+    for (let i = keysWithDesiredValues.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [keysWithDesiredValues[i], keysWithDesiredValues[j]] = [
+        keysWithDesiredValues[j],
+        keysWithDesiredValues[i],
+      ];
+    }
+
+    // Take the first 50 keys
+    const random50Keys = keysWithDesiredValues.slice(0, 50);
+    const keyValueList = random50Keys.map((key) => `${key};\n${levels[key]}`);
+
+    // setSets(extra_songs[key].split(TERMS_SPLIT));
+    // setShowSave(false);
+    console.log("keys: ", keyValueList);
   };
   const handleExtraSongs = (extra) => {
     setExtraSongsRaw(extra);
@@ -104,7 +83,7 @@ export default function Translate(props) {
           return obj;
         }, {});
       setLevels(dic);
-      // console.log("File uploaded successfully:", content);
+      console.log("File uploaded successfully:", dic);
     };
     reader.readAsText(file);
   };
@@ -112,7 +91,7 @@ export default function Translate(props) {
     <div className="translate">
       <h1></h1>
       {Object.keys(levels).length === 0 ? (
-        <label className="button">
+        <label className="button-pretty-1">
           Upload File
           <input
             type="file"
@@ -148,32 +127,56 @@ export default function Translate(props) {
       <div id="songs-names-container">
         {Object.keys(extra_songs).map((key) => (
           <div
-            className="song-name-box"
+            className="button-pretty-1"
             key={key}
             onClick={() => handleSongChosen(key)}
           >
             {key}
           </div>
         ))}
+        {Object.keys(extra_songs).length === 0 ? (
+          <div></div>
+        ) : (
+          <div className="random-button">
+            <div
+              className="button-pretty-1"
+              key={"random"}
+              onClick={() => handleRandomWords()}
+            >
+              Random Words
+              <img
+                className="random-logo"
+                src={require("../shuffle.png")}
+                alt="randomLogo"
+              ></img>
+            </div>
+          </div>
+        )}
       </div>
       <textarea rows="20" cols="120" onChange={handleMessageChange}></textarea>
       <h1></h1>
+
       <button
+        className="button-pretty-1"
         onClick={() => {
-          navigator.clipboard.writeText(words.join(".\n"));
+          navigator.clipboard.writeText(to_copy.join(".\n"));
         }}
       >
         Copy
+        <img
+          className="random-logo"
+          src={require("../duplicate.png")}
+          alt="copy"
+        ></img>
       </button>
       <h1></h1>
       <textarea
         rows="20"
         cols="120"
         onChange={(event) => {
-          handleTranslation(event, words);
+          handleTranslation(event);
         }}
       ></textarea>
-      {/* {words} */}
     </div>
   );
 }
