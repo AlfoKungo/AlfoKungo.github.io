@@ -101,7 +101,6 @@ export default function Clicker(props) {
           <input
             type="text"
             className="input-box"
-            // className="song-name"
             value={song_name}
             onChange={(event) => {
               setSongName(event.target.value);

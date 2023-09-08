@@ -44,11 +44,23 @@ export default function Translate(props) {
 
     // Take the first 50 keys
     const random50Keys = keysWithDesiredValues.slice(0, 50);
-    const keyValueList = random50Keys.map((key) => `${key};\n${levels[key]}`);
-
-    // setSets(extra_songs[key].split(TERMS_SPLIT));
-    // setShowSave(false);
-    console.log("keys: ", keyValueList);
+    let extra_songs_words = {};
+    for (let key in extra_songs) {
+      let all_words = extra_songs[key];
+      let splitted = all_words.split(TERMS_SPLIT);
+      for (let k in splitted) {
+        let val = splitted[k];
+        let w = val.split(";")[0].trim();
+        let t = val.split(";")[1].trim();
+        extra_songs_words[w] = t;
+      }
+    }
+    let new_sets = [];
+    for (let k in random50Keys) {
+      new_sets.push(random50Keys[k] + ";" + extra_songs_words[random50Keys[k]]);
+    }
+    setSets(new_sets);
+    setShowSave(false);
   };
   const handleExtraSongs = (extra) => {
     setExtraSongsRaw(extra);
