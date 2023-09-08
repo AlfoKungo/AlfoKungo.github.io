@@ -13,6 +13,7 @@ function flip_back(setFlip, id) {
 // }
 
 export default function ClickerButton(props) {
+  // let [card, setCard] = useState(props.card);
   let card = props.card;
   let index = props.index;
   let id = "que" + index;

@@ -11,7 +11,6 @@ export default function Clicker(props) {
   const LIMIT = 5;
   const extra_songs = props.extra_songs ? props.extra_songs : "";
   let p_levels = new Array(props.terms.length).fill(0);
-  console.log("dd3: ", props.levels);
 
   props.terms.map((value, index) => {
     let key = value.split(";\n")[0].split(";")[0].replace("\n", "");
@@ -21,21 +20,24 @@ export default function Clicker(props) {
     if (key in props.levels) p_levels[index] = props.levels[key];
   });
   console.log("pp", p_levels);
+
   const [terms, setTerms] = useState(props.terms);
   const [levels, setLevels] = useState(p_levels);
+  let cards = [];
+  for (let i = 0; i < props.terms.length; i++) {
+    cards.push(props.terms[i]);
+  }
   const [l_index, setLIndex] = useState(0);
   const [song_name, setSongName] = useState("");
+  // const [cards, setCards] = useState(cards_);
   const show_save = props.show_save;
 
-  let cards = [];
-  for (let i = 0; i < terms.length; i++) {
-    cards.push(terms[i]);
-  }
   const increaseLevel = (index) => {
     if (levels[index] < LIMIT) {
       const newLevels = [...levels];
       newLevels[index] += 1;
       setLevels(newLevels);
+      props.levels[terms[index].split(";")[0].trim()] = newLevels[index];
     } else {
       deleteItem(index);
     }
@@ -51,6 +53,7 @@ export default function Clicker(props) {
     const newLevels = [...levels];
     newLevels[index] -= 1;
     setLevels(newLevels);
+    props.levels[terms[index].split(";")[0].trim()] = newLevels[index];
   };
   const onKeyPress = (e) => {
     if (e.key === "=" && levels[l_index] < LIMIT) increaseLevel(l_index);
