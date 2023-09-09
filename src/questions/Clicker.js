@@ -21,6 +21,9 @@ export default function Clicker(props) {
   const [terms, setTerms] = useState(props.terms);
   const [levels, setLevels] = useState(p_levels);
   if (JSON.stringify(levels) != JSON.stringify(p_levels)) setLevels(p_levels);
+  if (JSON.stringify(terms) != JSON.stringify(props.terms))
+    setTerms(props.terms);
+
   let cards = [];
   for (let i = 0; i < props.terms.length; i++) {
     cards.push(props.terms[i]);
@@ -140,11 +143,21 @@ export default function Clicker(props) {
       )}
       <button className="button-pretty-1" onClick={downloadTxtFile}>
         Download txt
+        <img
+          className="random-logo"
+          src={require("../download.png")}
+          alt="randomLogo"
+        ></img>
       </button>
       <div></div>
       {show_reorg ? (
         <button className="button-pretty-1" onClick={handle_reorg}>
           Reorganize
+          <img
+            className="random-logo"
+            src={require("../backlog.png")}
+            alt="randomLogo"
+          ></img>
         </button>
       ) : (
         <div></div>

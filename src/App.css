@@ -497,3 +497,13 @@ input.input-box:focus {
   display: flex;
     align-items: center;
 }
+.random-button-data {
+  display: flex;
+  align-items: center;
+  background-color: #d9f1f9;
+      color: white;
+}
+
+.random-button-data:after {
+  background-color: #5fdeab;
+}

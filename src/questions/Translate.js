@@ -150,22 +150,13 @@ export default function Translate(props) {
         </div>
       )}
       <h1></h1>
-      <div id="songs-names-container">
-        {Object.keys(extra_songs).map((key) => (
-          <div
-            className="button-pretty-1"
-            key={key}
-            onClick={() => handleSongChosen(key)}
-          >
-            {key}
-          </div>
-        ))}
-        {Object.keys(extra_songs).length === 0 ? (
-          <div></div>
-        ) : (
+      {Object.keys(extra_songs).length === 0 ? (
+        <div></div>
+      ) : (
+        <div id="songs-names-container">
           <div className="random-button">
             <div
-              className="button-pretty-1"
+              className="random-button-data button-pretty-1"
               key={"random"}
               onClick={() => handleRandomWords()}
             >
@@ -177,7 +168,18 @@ export default function Translate(props) {
               ></img>
             </div>
           </div>
-        )}
+        </div>
+      )}
+      <div id="songs-names-container">
+        {Object.keys(extra_songs).map((key) => (
+          <div
+            className="button-pretty-1"
+            key={key}
+            onClick={() => handleSongChosen(key)}
+          >
+            {key}
+          </div>
+        ))}
       </div>
       <textarea rows="20" cols="120" onChange={handleMessageChange}></textarea>
       <h1></h1>
