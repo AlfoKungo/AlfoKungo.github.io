@@ -24,6 +24,7 @@ export default function Translate(props) {
   const [extra_songs, setExtraSongs] = useState("");
   const [extra_songs_raw, setExtraSongsRaw] = useState("");
   const [show_save, setShowSave] = useState(true);
+  const [show_reorg, setShowReorg] = useState(false);
   setSets_ = setSets;
   const handleSongChosen = (key) => {
     setSets(extra_songs[key].split(TERMS_SPLIT));
@@ -42,7 +43,6 @@ export default function Translate(props) {
       ];
     }
 
-    // Take the first 50 keys
     const random50Keys = keysWithDesiredValues.slice(0, 50);
     let extra_songs_words = {};
     for (let key in extra_songs) {
@@ -61,6 +61,16 @@ export default function Translate(props) {
     }
     setSets(new_sets);
     setShowSave(false);
+    setShowReorg(true);
+  };
+  const handleReorganize = () => {
+    let new_sets = sets.slice(0);
+    for (let i = sets.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [new_sets[i], new_sets[j]] = [new_sets[j], new_sets[i]]; // swap
+    }
+    setSets(new_sets);
+    console.log(sets);
   };
   const handleExtraSongs = (extra) => {
     setExtraSongsRaw(extra);
@@ -116,13 +126,23 @@ export default function Translate(props) {
       )}
 
       {sets.length > 0 ? (
-        <Ciicker
-          terms={sets}
-          levels={levels}
-          extra_songs={extra_songs_raw}
-          show_save={show_save}
-          in_line_delimeter={";"}
-        />
+        <div>
+          {show_reorg ? (
+            <button className="button-pretty-1" onClick={handleReorganize}>
+              Reorganize
+            </button>
+          ) : (
+            <div></div>
+          )}
+          <Ciicker
+            terms={sets}
+            levels={levels}
+            extra_songs={extra_songs_raw}
+            show_save={show_save}
+            show_reorg={show_reorg}
+            in_line_delimeter={";"}
+          />
+        </div>
       ) : (
         <div>
           Instuructions:

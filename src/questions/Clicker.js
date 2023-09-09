@@ -14,15 +14,13 @@ export default function Clicker(props) {
 
   props.terms.map((value, index) => {
     let key = value.split(";\n")[0].split(";")[0].replace("\n", "");
-    console.log("dd1: ", key);
-    console.log("dd2: ", props.levels[key]);
-    // console.log("dd1: ", value, key);
     if (key in props.levels) p_levels[index] = props.levels[key];
   });
   console.log("pp", p_levels);
 
   const [terms, setTerms] = useState(props.terms);
   const [levels, setLevels] = useState(p_levels);
+  if (JSON.stringify(levels) != JSON.stringify(p_levels)) setLevels(p_levels);
   let cards = [];
   for (let i = 0; i < props.terms.length; i++) {
     cards.push(props.terms[i]);
@@ -31,6 +29,7 @@ export default function Clicker(props) {
   const [song_name, setSongName] = useState("");
   // const [cards, setCards] = useState(cards_);
   const show_save = props.show_save;
+  const show_reorg = props.show_reorg;
 
   const increaseLevel = (index) => {
     if (levels[index] < LIMIT) {
@@ -90,11 +89,34 @@ export default function Clicker(props) {
     element.click();
   };
 
+  let reorganizeTerms = () => {
+    const combined = [];
+    for (const key in terms) {
+      combined.push([terms[key], levels[key]]);
+    }
+
+    for (let i = combined.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [combined[i], combined[j]] = [combined[j], combined[i]]; // swap
+    }
+
+    // 3. Extract dictionaries
+    const shuffledTerms = [];
+    const shuffledLevels = [];
+
+    for (const [term, level] of combined) {
+      shuffledTerms.push(term);
+      shuffledLevels.push(level);
+    }
+    setTerms(shuffledTerms);
+    setLevels(shuffledLevels);
+  };
+
   return (
     <div>
-      <div class="tooltip-container">
-        <button class="question-mark-button">?</button>
-        <div class="tooltip-content">
+      <div className="tooltip-container">
+        <button className="question-mark-button">?</button>
+        <div className="tooltip-content">
           After pressing on a box, you can press <b>+</b> or <b>-</b> to
           increase or reduce the level of knowledge of a word
         </div>
@@ -119,6 +141,13 @@ export default function Clicker(props) {
       <button className="button-pretty-1" onClick={downloadTxtFile}>
         Download txt
       </button>
+      {/* {show_reorg ? (
+        <button className="button-pretty-1" onClick={reorganizeTerms}>
+          Reorganize
+        </button>
+      ) : (
+        <div></div>
+      )} */}
 
       <div className="click-card" onKeyDown={onKeyPress} tabIndex="0">
         <ul>
