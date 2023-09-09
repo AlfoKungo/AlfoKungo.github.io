@@ -507,3 +507,32 @@ input.input-box:focus {
 .random-button-data:after {
   background-color: #5fdeab;
 }
+
+
+.button-tooltip-cont {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.button-tooltip-text {
+  visibility: hidden;
+  background-color: #55555598;
+  color: #fff;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  /* Position the tooltip above the text/button */
+  left: 50%;
+  margin-left: -60px;
+opacity: 0.8;
+  transition: opacity 0.3s;
+  font-weight: bold;
+}
+.button-tooltip-cont:hover .button-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}

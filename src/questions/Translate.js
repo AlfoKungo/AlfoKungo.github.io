@@ -1,6 +1,10 @@
 // import {song, tsong} from "../Variable"
 import { useState } from "react";
 import { updateSong, updateTranslation } from "./ProcessSong";
+import seedrandom from "seedrandom";
+import Tooltip from "@mui/material/Tooltip";
+import Fade from "@mui/material/Fade";
+
 import Ciicker, {
   FILE_SPLIT,
   SONG_SPLIT,
@@ -31,12 +35,15 @@ export default function Translate(props) {
     console.log("ss: ", extra_songs[key].split(TERMS_SPLIT));
     setShowSave(false);
   };
-  const handleRandomWords = () => {
+  const handleRandomWords = (seed) => {
     const keysWithDesiredValues = Object.keys(levels).filter(
       (key) => levels[key] === 0 || levels[key] === 1 || levels[key] === 2
     );
+
+    const rng = seedrandom(seed); // Create a new seeded random generator
+
     for (let i = keysWithDesiredValues.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(rng() * (i + 1));
       [keysWithDesiredValues[i], keysWithDesiredValues[j]] = [
         keysWithDesiredValues[j],
         keysWithDesiredValues[i],
@@ -113,16 +120,18 @@ export default function Translate(props) {
     <div className="translate">
       <h1></h1>
       {Object.keys(levels).length === 0 ? (
-        <label className="button-pretty-1">
-          Upload File
-          <input
-            type="file"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-        </label>
+        <Tooltip title="Upload" TransitionProps={{ timeout: 600 }}>
+          <label className="button-pretty-1">
+            Upload File
+            <input
+              type="file"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+          </label>
+        </Tooltip>
       ) : (
-        <div>Save is loaded</div>
+        <div></div>
       )}
 
       {sets.length > 0 ? (
@@ -158,7 +167,7 @@ export default function Translate(props) {
             <div
               className="random-button-data button-pretty-1"
               key={"random"}
-              onClick={() => handleRandomWords()}
+              onClick={() => handleRandomWords(Math.random())}
             >
               Random Words
               <img
@@ -168,6 +177,22 @@ export default function Translate(props) {
               ></img>
             </div>
           </div>
+          {Object.keys([1, 2, 3, 4]).map((key, val) => (
+            <div className="random-button">
+              <div
+                className="random-button-data button-pretty-1"
+                key={"random " + key}
+                onClick={() =>
+                  handleRandomWords(
+                    new Date().toString().split(" ").slice(0, 4).toString() +
+                      key
+                  )
+                }
+              >
+                {"daily " + (val + 1)}
+              </div>
+            </div>
+          ))}
         </div>
       )}
       <div id="songs-names-container">
@@ -183,20 +208,23 @@ export default function Translate(props) {
       </div>
       <textarea rows="20" cols="120" onChange={handleMessageChange}></textarea>
       <h1></h1>
-
-      <button
-        className="button-pretty-1"
-        onClick={() => {
-          navigator.clipboard.writeText(to_copy.join(".\n"));
-        }}
-      >
-        Copy
-        <img
-          className="random-logo"
-          src={require("../duplicate.png")}
-          alt="copy"
-        ></img>
-      </button>
+      <div className="button-tooltip-cont">
+        <button
+          className="button-pretty-1"
+          title="Copy"
+          onClick={() => {
+            navigator.clipboard.writeText(to_copy.join(".\n"));
+          }}
+        >
+          Copy
+          <img
+            className="random-logo"
+            src={require("../duplicate.png")}
+            alt="copy"
+          ></img>
+        </button>
+        <div className="button-tooltip-text">This is a styled tooltip</div>
+      </div>
       <h1></h1>
       <textarea
         rows="20"
