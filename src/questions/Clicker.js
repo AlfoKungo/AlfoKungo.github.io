@@ -27,9 +27,9 @@ export default function Clicker(props) {
   }
   const [l_index, setLIndex] = useState(0);
   const [song_name, setSongName] = useState("");
-  // const [cards, setCards] = useState(cards_);
   const show_save = props.show_save;
   const show_reorg = props.show_reorg;
+  const handle_reorg = props.handle_reorg;
 
   const increaseLevel = (index) => {
     if (levels[index] < LIMIT) {
@@ -141,13 +141,14 @@ export default function Clicker(props) {
       <button className="button-pretty-1" onClick={downloadTxtFile}>
         Download txt
       </button>
-      {/* {show_reorg ? (
-        <button className="button-pretty-1" onClick={reorganizeTerms}>
+      <div></div>
+      {show_reorg ? (
+        <button className="button-pretty-1" onClick={handle_reorg}>
           Reorganize
         </button>
       ) : (
         <div></div>
-      )} */}
+      )}
 
       <div className="click-card" onKeyDown={onKeyPress} tabIndex="0">
         <ul>

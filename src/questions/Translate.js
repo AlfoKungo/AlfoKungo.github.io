@@ -127,19 +127,13 @@ export default function Translate(props) {
 
       {sets.length > 0 ? (
         <div>
-          {show_reorg ? (
-            <button className="button-pretty-1" onClick={handleReorganize}>
-              Reorganize
-            </button>
-          ) : (
-            <div></div>
-          )}
           <Ciicker
             terms={sets}
             levels={levels}
             extra_songs={extra_songs_raw}
             show_save={show_save}
             show_reorg={show_reorg}
+            handle_reorg={handleReorganize}
             in_line_delimeter={";"}
           />
         </div>
