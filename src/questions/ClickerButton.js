@@ -30,8 +30,8 @@ export default function ClickerButton(props) {
   const shadesOfGrey = [
     "#000000", // Black
     "#404040", // Dark grey
-    "#808080", // Grey
-    "#B0B0B0", // Light grey
+    "#606060", // Grey
+    "#909090", // Light grey
     "#D3D3D3", // Lighter grey
     "#EEEEEE", // Lightest grey
   ];
