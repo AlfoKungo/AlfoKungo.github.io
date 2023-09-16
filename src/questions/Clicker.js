@@ -1,15 +1,15 @@
 import { useState } from "react";
 import ClickerButton from "./ClickerButton";
+import Slider from "@mui/material/Slider";
 
-export const FILE_SPLIT = "=".repeat(10);
 export const SONG_SPLIT = "-".repeat(5);
 export const NAME_SONG_SPLIT = ":".repeat(5);
-export const TERMS_SPLIT = ":::";
 
 export default function Clicker(props) {
+  const [slider, setSlider] = useState([0, 2]);
   console.log(props.terms);
   const LIMIT = 5;
-  const extra_songs = props.extra_songs ? props.extra_songs : "";
+  // const extra_songs = props.extra_songs ? props.extra_songs : "";
   let p_levels = new Array(props.terms.length).fill(0);
 
   props.terms.map((value, index) => {
@@ -29,8 +29,6 @@ export default function Clicker(props) {
     cards.push(props.terms[i]);
   }
   const [l_index, setLIndex] = useState(0);
-  const [song_name, setSongName] = useState("");
-  const show_save = props.show_save;
   const show_reorg = props.show_reorg;
   const handle_reorg = props.handle_reorg;
 
@@ -40,6 +38,7 @@ export default function Clicker(props) {
       newLevels[index] += 1;
       setLevels(newLevels);
       props.levels[terms[index].split(";")[0].trim()] = newLevels[index];
+      props.handleLevel(terms[index].split(";")[0], 1);
     } else {
       deleteItem(index);
     }
@@ -56,40 +55,13 @@ export default function Clicker(props) {
     newLevels[index] -= 1;
     setLevels(newLevels);
     props.levels[terms[index].split(";")[0].trim()] = newLevels[index];
+    props.handleLevel(terms[index].split(";")[0], -1);
   };
   const onKeyPress = (e) => {
-    if (e.key === "=" && levels[l_index] < LIMIT) increaseLevel(l_index);
-    if (e.key === "-" && levels[l_index] > 0) reduceLevel(l_index);
-  };
-
-  let downloadTxtFile = () => {
-    const element = document.createElement("a");
-    let ss = terms.slice().reduce((obj, key, index) => {
-      let k = key.split(";\n")[0].split(";")[0];
-      if (!k.includes(" ")) obj[k] = levels[index];
-      return obj;
-    }, {});
-    console.log("sss:", ss);
-    let text = Object.entries({ ...props.levels, ...ss })
-      .map(([key, value]) => `${key}:${value}`)
-      .join("\n");
-    text += "\n" + FILE_SPLIT;
-    if (song_name !== "") {
-      console.log("inside", terms);
-      text += "\n" + "Name: " + song_name;
-      text += "\n" + NAME_SONG_SPLIT + "\n";
-      text += terms.join(TERMS_SPLIT);
-      text += "\n" + SONG_SPLIT;
-    }
-    text += extra_songs;
-    console.log(extra_songs);
-    const file = new Blob([text], {
-      type: "text/plain",
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = "save.txt";
-    document.body.appendChild(element); // Required for this to work in FireFox
-    element.click();
+    if ((e.key === "=" || e.key === ".") && levels[l_index] < LIMIT)
+      increaseLevel(l_index);
+    if ((e.key === "-" || e.key === ",") && levels[l_index] > 0)
+      reduceLevel(l_index);
   };
 
   let reorganizeTerms = () => {
@@ -124,31 +96,6 @@ export default function Clicker(props) {
           increase or reduce the level of knowledge of a word
         </div>
       </div>
-      {show_save ? (
-        <div className="input-container">
-          <input
-            type="text"
-            className="input-box"
-            value={song_name}
-            onChange={(event) => {
-              setSongName(event.target.value);
-            }}
-          ></input>
-          <div className="tooltip-text">
-            Add a <b>name</b> to save the current text in the save file
-          </div>
-        </div>
-      ) : (
-        <div></div>
-      )}
-      <button className="button-pretty-1" onClick={downloadTxtFile}>
-        Download txt
-        <img
-          className="random-logo"
-          src={require("../download.png")}
-          alt="randomLogo"
-        ></img>
-      </button>
       <div></div>
       {show_reorg ? (
         <button className="button-pretty-1" onClick={handle_reorg}>
@@ -184,6 +131,23 @@ export default function Clicker(props) {
           })}
         </ul>
       </div>
+      <Slider
+        getAriaLabel={() => "Levels range"}
+        value={slider}
+        onChange={(event, newValue) => {
+          setSlider(newValue);
+        }}
+        step={1}
+        style={{
+          color: "#5fdeab", // Main color
+        }}
+        thumbColor="inherit"
+        valueLabelDisplay="auto"
+        min={0}
+        max={6}
+        marks
+        sx={{ marginLeft: 5, marginTop: 5, width: "30%" }}
+      />
     </div>
   );
 }

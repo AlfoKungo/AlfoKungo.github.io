@@ -1,19 +1,4 @@
-// let song = "";
-// let tsong = "";
-// let words = "";
-// let lines = "";
-
 import * as Base from "../Utils/Base";
-// let setSets_;
-
-// const handleMessageChange = (event) => {
-//   song = event.target.value;
-//   updateSong();
-// };
-// const handleTranslation = (event, words) => {
-//   tsong = event.target.value;
-//   updateTranslation(words);
-// };
 
 export function updateSong(song) {
   let words = "";
@@ -38,14 +23,20 @@ export function updateSong(song) {
   return words.concat(lines);
 }
 
-export function updateTranslation(words, tsong) {
-  console.log(words);
-  let twords = tsong.split(".");
-  console.log(twords);
+export function getTranslation(words, tsong) {
+  const twords = tsong.split(".");
+  let trans = {};
 
+  for (let i = 0; i < twords.length; i++) {
+    trans[words[i]] = { translation: twords[i].replace("\n", ""), level: 0 };
+  }
+  return trans;
+}
+
+export function createSets(words, translations) {
   let set = [];
-
-  for (let i = 0; i < twords.length - 1; i++)
-    set.push(words[i] + ";" + twords[i]);
+  for (let i = 0; i < words.length; i++) {
+    set.push(words[i] + ";" + translations[words[i]]["translation"]);
+  }
   return set;
 }

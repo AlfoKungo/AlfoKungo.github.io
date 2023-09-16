@@ -12,7 +12,9 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+div {
+  white-space: pre-wrap;
+}
 
 
 .App-header {
@@ -491,6 +493,16 @@ input.input-box:focus {
   margin-right: 5px;
     position: relative;
       top: -1px;
+}
+.lines-logo {
+  /* filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(315deg) brightness(106%) contrast(107%); */
+  width: 27px;
+  height: 27px;
+  vertical-align: middle;
+  margin-left: 8px;
+  margin-right: 5px;
+  position: relative;
+  top: -1px;
 }
 
 .random-button {

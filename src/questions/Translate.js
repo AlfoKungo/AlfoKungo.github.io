@@ -1,70 +1,70 @@
-// import {song, tsong} from "../Variable"
 import { useState } from "react";
-import { updateSong, updateTranslation } from "./ProcessSong";
+import { updateSong, getTranslation, createSets } from "./ProcessSong";
 import seedrandom from "seedrandom";
 import Tooltip from "@mui/material/Tooltip";
-import Fade from "@mui/material/Fade";
+import yaml from "js-yaml";
+import MainTabs from "../Utils/MainTabs";
 
-import Ciicker, {
-  FILE_SPLIT,
-  SONG_SPLIT,
-  NAME_SONG_SPLIT,
-  TERMS_SPLIT,
-} from "./Clicker";
+import Ciicker, { SONG_SPLIT, NAME_SONG_SPLIT } from "./Clicker";
+import TextView from "../text_view/TextView";
 
 let to_copy = "";
-let setSets_;
-
-const handleMessageChange = (event) => {
-  to_copy = updateSong(event.target.value);
-};
-const handleTranslation = (event) => {
-  setSets_(updateTranslation(to_copy, event.target.value));
-};
-
+let data_obj = { words: {}, songs: {} };
 export default function Translate(props) {
   const [sets, setSets] = useState("");
+  const [words, setWords] = useState({});
+  const [songs, setSongs] = useState({});
+  const [song_name, setSongName] = useState("");
   const [levels, setLevels] = useState({});
-  const [extra_songs, setExtraSongs] = useState("");
+
+  const [org_text, setOrgText] = useState("");
   const [extra_songs_raw, setExtraSongsRaw] = useState("");
   const [show_save, setShowSave] = useState(true);
   const [show_reorg, setShowReorg] = useState(false);
-  setSets_ = setSets;
+
+  const handleMessageChange = (event) => {
+    setOrgText(event.target.value);
+    to_copy = updateSong(event.target.value);
+  };
+  const handleTranslation = (event) => {
+    let trans = getTranslation(to_copy, event.target.value);
+    setSets(createSets(to_copy, trans));
+    data_obj["words"] = Object.assign({}, trans, data_obj["words"]);
+    setWords(Object.assign({}, trans, data_obj["words"]));
+  };
+
   const handleSongChosen = (key) => {
-    setSets(extra_songs[key].split(TERMS_SPLIT));
-    console.log("ss: ", extra_songs[key].split(TERMS_SPLIT));
+    let temp_sets = createSets(
+      data_obj["songs"][key]["proccessed_song"],
+      data_obj["words"]
+    );
+    setSets(temp_sets);
+    setOrgText(data_obj["songs"][key]["full_song"]);
     setShowSave(false);
   };
   const handleRandomWords = (seed) => {
-    const keysWithDesiredValues = Object.keys(levels).filter(
-      (key) => levels[key] === 0 || levels[key] === 1 || levels[key] === 2
+    // const keysWithDesiredValues = Object.keys(levels).filter(
+    //   (key) => levels[key] === 0 || levels[key] === 1 || levels[key] === 2
+    // );
+    const filteredKeys = Object.keys(words).filter(
+      (key) =>
+        key.indexOf(" ") === -1 &&
+        (words[key].level === 0 || words[key].level === 1)
     );
 
     const rng = seedrandom(seed); // Create a new seeded random generator
 
-    for (let i = keysWithDesiredValues.length - 1; i > 0; i--) {
+    for (let i = filteredKeys.length - 1; i > 0; i--) {
       const j = Math.floor(rng() * (i + 1));
-      [keysWithDesiredValues[i], keysWithDesiredValues[j]] = [
-        keysWithDesiredValues[j],
-        keysWithDesiredValues[i],
-      ];
+      [filteredKeys[i], filteredKeys[j]] = [filteredKeys[j], filteredKeys[i]];
     }
 
-    const random50Keys = keysWithDesiredValues.slice(0, 50);
-    let extra_songs_words = {};
-    for (let key in extra_songs) {
-      let all_words = extra_songs[key];
-      let splitted = all_words.split(TERMS_SPLIT);
-      for (let k in splitted) {
-        let val = splitted[k];
-        let w = val.split(";")[0].trim();
-        let t = val.split(";")[1].trim();
-        extra_songs_words[w] = t;
-      }
-    }
+    const random50Keys = filteredKeys.slice(0, 50);
     let new_sets = [];
     for (let k in random50Keys) {
-      new_sets.push(random50Keys[k] + ";" + extra_songs_words[random50Keys[k]]);
+      new_sets.push(
+        random50Keys[k] + ";" + words[random50Keys[k]]["translation"]
+      );
     }
     setSets(new_sets);
     setShowSave(false);
@@ -79,43 +79,45 @@ export default function Translate(props) {
     setSets(new_sets);
     console.log(sets);
   };
-  const handleExtraSongs = (extra) => {
-    setExtraSongsRaw(extra);
-
-    if (extra && extra.includes(SONG_SPLIT)) {
-      let pairs = extra.split(SONG_SPLIT);
-      const songs = {};
-      pairs.forEach((pair) => {
-        const [key, value] = pair.split(NAME_SONG_SPLIT);
-        if (key !== "\n") songs[key.replace("Name: ", "")] = value;
-      });
-      console.log(songs);
-      setExtraSongs(songs);
+  function downloadYamlFile() {
+    if (song_name !== "") {
+      data_obj["songs"][song_name] = {
+        full_song: org_text,
+        proccessed_song: to_copy,
+      };
     }
-  };
-
-  const handleFileChange = async (event) => {
+    data_obj["words"] = words;
+    let exportName = "test";
+    const dataStr =
+      "data:text/yaml;charset=utf-8," + encodeURIComponent(yaml.dump(data_obj));
+    const downloadAnchorNode = document.createElement("a");
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", exportName + ".yaml");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
+  function handleLevel(word, level_change) {
+    data_obj["words"][word]["level"] =
+      data_obj["words"][word]["level"] + level_change;
+  }
+  function uploadYamlFile(event) {
     const file = event.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      var content = reader.result;
-      handleExtraSongs(content.split(FILE_SPLIT, 2)[1]);
-      content = content.split(FILE_SPLIT, 2)[0];
-      const dic = content
-        .trim()
-        .split("\n")
-        .reduce((obj, line) => {
-          const [key, value] = line.split(":");
-          obj[key.replace("\n", "")] = parseInt(value, 10); // Convert the value to an integer
-          return obj;
-        }, {});
-      setLevels(dic);
-      console.log("File uploaded successfully:", dic);
-    };
-    reader.readAsText(file);
-  };
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (evt) {
+        try {
+          data_obj = yaml.load(evt.target.result);
+          setSongs(data_obj["songs"]);
+          setWords(data_obj["words"]);
+        } catch (error) {
+          console.error("Error parsing YAML", error);
+        }
+      };
+      reader.readAsText(file);
+    }
+  }
+
   return (
     <div className="translate">
       <h1></h1>
@@ -126,7 +128,7 @@ export default function Translate(props) {
             <input
               type="file"
               style={{ display: "none" }}
-              onChange={handleFileChange}
+              onChange={uploadYamlFile}
             />
           </label>
         </Tooltip>
@@ -136,13 +138,40 @@ export default function Translate(props) {
 
       {sets.length > 0 ? (
         <div>
-          <Ciicker
+          {show_save ? (
+            <div className="input-container">
+              <input
+                type="text"
+                className="input-box"
+                value={song_name}
+                onChange={(event) => {
+                  setSongName(event.target.value);
+                }}
+              ></input>
+              <div className="tooltip-text">
+                Add a <b>name</b> to save the current text in the save file
+              </div>
+            </div>
+          ) : (
+            <div></div>
+          )}
+          <button className="button-pretty-1" onClick={downloadYamlFile}>
+            Download txt
+            <img
+              className="random-logo"
+              src={require("../download.png")}
+              alt="randomLogo"
+            ></img>
+          </button>
+          <MainTabs
             terms={sets}
+            text={org_text}
             levels={levels}
             extra_songs={extra_songs_raw}
             show_save={show_save}
             show_reorg={show_reorg}
             handle_reorg={handleReorganize}
+            handleLevel={handleLevel}
             in_line_delimeter={";"}
           />
         </div>
@@ -159,7 +188,7 @@ export default function Translate(props) {
         </div>
       )}
       <h1></h1>
-      {Object.keys(extra_songs).length === 0 ? (
+      {Object.keys(songs).length === 0 ? (
         <div></div>
       ) : (
         <div id="songs-names-container">
@@ -196,7 +225,7 @@ export default function Translate(props) {
         </div>
       )}
       <div id="songs-names-container">
-        {Object.keys(extra_songs).map((key) => (
+        {Object.keys(songs).map((key) => (
           <div
             className="button-pretty-1"
             key={key}
@@ -223,7 +252,7 @@ export default function Translate(props) {
             alt="copy"
           ></img>
         </button>
-        <div className="button-tooltip-text">This is a styled tooltip</div>
+        <div className="button-tooltip-text">Copy</div>
       </div>
       <h1></h1>
       <textarea

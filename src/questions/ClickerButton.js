@@ -3,11 +3,6 @@ import { useState } from "react";
 let in_line_delimeter;
 const switch_sides = true;
 
-function flip_back(setFlip, id) {
-  setFlip(false);
-  document.querySelector("#" + id).classList.remove("clicker");
-}
-
 // function know_it(id) {
 //   document.getElementById(id).style.backgroundColor = "green";
 // }
@@ -24,7 +19,10 @@ export default function ClickerButton(props) {
 
   const [flip, setFlip] = useState(false);
   // const [level, setLevel] = useState(_level);
-
+  function flip_back(id) {
+    setFlip(false);
+    document.querySelector("#" + id).classList.remove("clicker");
+  }
   let [que, ans] = card.split(in_line_delimeter);
   if (switch_sides) [que, ans] = [ans, que];
   const shadesOfGrey = [
@@ -51,7 +49,7 @@ export default function ClickerButton(props) {
           setFlip(true);
           document.querySelector("#" + id).classList.add("clicker");
           setTimeout(() => {
-            flip_back(setFlip, id);
+            flip_back(id);
           }, 2500);
         }}
         id={id + "li"}
