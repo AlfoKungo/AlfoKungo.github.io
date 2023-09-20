@@ -15,7 +15,6 @@ export default function Translate(props) {
   const [words, setWords] = useState({});
   const [songs, setSongs] = useState({});
   const [song_name, setSongName] = useState("");
-  const [levels, setLevels] = useState({});
 
   const [org_text, setOrgText] = useState("");
   const [extra_songs_raw, setExtraSongsRaw] = useState("");
@@ -98,8 +97,9 @@ export default function Translate(props) {
     downloadAnchorNode.remove();
   }
   function handleLevel(word, level_change) {
-    data_obj["words"][word]["level"] =
-      data_obj["words"][word]["level"] + level_change;
+    let new_level = data_obj["words"][word].level + level_change;
+    if (new_level >= 0 && new_level <= 6)
+      data_obj["words"][word].level = new_level;
   }
   function uploadYamlFile(event) {
     const file = event.target.files[0];
@@ -121,7 +121,7 @@ export default function Translate(props) {
   return (
     <div className="translate">
       <h1></h1>
-      {Object.keys(levels).length === 0 ? (
+      {Object.keys(data_obj["songs"]).length === 0 ? (
         <Tooltip title="Upload" TransitionProps={{ timeout: 600 }}>
           <label className="button-pretty-1">
             Upload File
@@ -166,7 +166,8 @@ export default function Translate(props) {
           <MainTabs
             terms={sets}
             text={org_text}
-            levels={levels}
+            // levels={levels}
+            words={words}
             extra_songs={extra_songs_raw}
             show_save={show_save}
             show_reorg={show_reorg}
@@ -225,15 +226,17 @@ export default function Translate(props) {
         </div>
       )}
       <div id="songs-names-container">
-        {Object.keys(songs).map((key) => (
-          <div
-            className="button-pretty-1"
-            key={key}
-            onClick={() => handleSongChosen(key)}
-          >
-            {key}
-          </div>
-        ))}
+        {Object.keys(songs)
+          .reverse()
+          .map((key) => (
+            <div
+              className="button-pretty-1"
+              key={key}
+              onClick={() => handleSongChosen(key)}
+            >
+              {key}
+            </div>
+          ))}
       </div>
       <textarea rows="20" cols="120" onChange={handleMessageChange}></textarea>
       <h1></h1>

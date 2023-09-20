@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ClickerButton from "./ClickerButton";
 import Slider from "@mui/material/Slider";
+import scrapeHtmlWeb from "../Utils/scrape-html-web";
 
 export const SONG_SPLIT = "-".repeat(5);
 export const NAME_SONG_SPLIT = ":".repeat(5);
@@ -9,12 +10,11 @@ export default function Clicker(props) {
   const [slider, setSlider] = useState([0, 2]);
   console.log(props.terms);
   const LIMIT = 5;
-  // const extra_songs = props.extra_songs ? props.extra_songs : "";
   let p_levels = new Array(props.terms.length).fill(0);
 
   props.terms.map((value, index) => {
     let key = value.split(";\n")[0].split(";")[0].replace("\n", "");
-    if (key in props.levels) p_levels[index] = props.levels[key];
+    p_levels[index] = props.words[key]["level"];
   });
   console.log("pp", p_levels);
 
@@ -37,7 +37,6 @@ export default function Clicker(props) {
       const newLevels = [...levels];
       newLevels[index] += 1;
       setLevels(newLevels);
-      props.levels[terms[index].split(";")[0].trim()] = newLevels[index];
       props.handleLevel(terms[index].split(";")[0], 1);
     } else {
       deleteItem(index);
@@ -54,7 +53,6 @@ export default function Clicker(props) {
     const newLevels = [...levels];
     newLevels[index] -= 1;
     setLevels(newLevels);
-    props.levels[terms[index].split(";")[0].trim()] = newLevels[index];
     props.handleLevel(terms[index].split(";")[0], -1);
   };
   const onKeyPress = (e) => {
@@ -121,10 +119,8 @@ export default function Clicker(props) {
                 key={card}
                 level={levels[index]}
                 onClick={(e) => {
-                  e.preventDefault();
+                  // e.preventDefault();
                   setLIndex(index);
-                  if (e.metaKey) increaseLevel(index);
-                  if (e.altKey && levels[index] > 0) reduceLevel(l_index);
                 }}
               />
             );

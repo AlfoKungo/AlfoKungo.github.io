@@ -72,7 +72,8 @@ export default function MainTabs(props) {
       <CustomTabPanel value={value} index={0}>
         <Ciicker
           terms={props.terms}
-          levels={props.levels}
+          // levels={props.levels}
+          words={props.words}
           extra_songs={props.extra_songs}
           show_save={props.show_save}
           show_reorg={props.show_reorg}
@@ -85,6 +86,7 @@ export default function MainTabs(props) {
         <TextView
           terms={props.terms}
           text={props.text}
+          words={props.words}
           levels={props.levels}
           extra_songs={props.extra_songs}
           show_save={props.show_save}

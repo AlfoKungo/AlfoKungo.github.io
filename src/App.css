@@ -548,3 +548,12 @@ opacity: 0.8;
   visibility: visible;
   opacity: 1;
 }
+
+.typo-examples{
+  text-align: left !important;
+}
+.noPaddingTooltip {
+  padding: 0 !important;
+  max-width: 900px !important;
+      /* fontSize: theme.typography.pxToRem(12); */
+}
