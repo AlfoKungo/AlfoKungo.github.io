@@ -36,7 +36,11 @@ export function getTranslation(words, tsong) {
 export function createSets(words, translations) {
   let set = [];
   for (let i = 0; i < words.length; i++) {
-    set.push(words[i] + ";" + translations[words[i]]["translation"]);
+    let w = words[i];
+    if (translations[w] === undefined) {
+      console.log("g");
+    }
+    set.push(words[i] + ";" + translations[words[i]].translation);
   }
   return set;
 }

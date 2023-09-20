@@ -19,7 +19,7 @@ export default function Translate(props) {
   const [org_text, setOrgText] = useState("");
   const [extra_songs_raw, setExtraSongsRaw] = useState("");
   const [show_save, setShowSave] = useState(true);
-  const [show_reorg, setShowReorg] = useState(false);
+  const [show_reorg, setShowReorg] = useState(true);
 
   const handleMessageChange = (event) => {
     setOrgText(event.target.value);

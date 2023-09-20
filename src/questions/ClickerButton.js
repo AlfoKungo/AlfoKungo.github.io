@@ -21,7 +21,8 @@ export default function ClickerButton(props) {
   // const [level, setLevel] = useState(_level);
   function flip_back(id) {
     setFlip(false);
-    document.querySelector("#" + id).classList.remove("clicker");
+    let d = document.querySelector("#" + id);
+    if (d != null) d.classList.remove("clicker");
   }
   let [que, ans] = card.split(in_line_delimeter);
   if (switch_sides) [que, ans] = [ans, que];

@@ -23,6 +23,12 @@ export default function TextView(props) {
   const [checked, setChecked] = useState(true);
   const [dynamicColor, setDynamicColor] = useState(false);
   const [curWord, setCurWord] = useState("");
+  const trans_dict = props.terms.reduce((acc, item) => {
+    const [key, value] = item.split(";");
+    acc[key] = value.trim();
+    return acc;
+  }, {});
+
   let lines = props.text.split("\n");
 
   let words = [];
@@ -31,19 +37,18 @@ export default function TextView(props) {
     words = words.concat(lines[l].split(" "));
     words.push("\n");
   }
-  const [open_list, setOpenList] = useState(
-    Array.from({ length: words.length }, (_, i) => ({
-      is_open: false,
-      content: "",
-      classes: { tooltip: "noPaddingTooltip" },
-    }))
-  );
+  const [open_list, setOpenList] = useState(generateOpenList(words));
+  if (words.length != open_list.length) {
+    setOpenList([...generateOpenList(words)]);
+  }
 
-  const trans_dict = props.terms.reduce((acc, item) => {
-    const [key, value] = item.split(";");
-    acc[key] = value.trim();
-    return acc;
-  }, {});
+  function generateOpenList(words) {
+    return Array.from({ length: words.length }, (_, i) => ({
+      is_open: false,
+      content: trans_dict[words[i].toLowerCase().replace(/^[,]+|[,]+$/g, "")],
+      classes: {},
+    }));
+  }
   const style = { fontSize: "24px" };
   const theme = createTheme({
     components: {
@@ -78,26 +83,10 @@ export default function TextView(props) {
   }
   async function handleWordClick(is_left_click, index, event, word) {
     let copy_list = open_list;
-
-    copy_list[index].is_open = event;
-    // if (is_left_click) {
-    copy_list[index].content =
-      trans_dict[word.toLowerCase().replace(/^[,]+|[,]+$/g, "")];
-    copy_list[index].classes = {};
-    // }
-    //  else {
-    //   const data = await scrapeHtmlWeb({
-    //     url:
-    //       "https://www.linguee.com/english-portuguese/search?source=auto&query=" +
-    //       word,
-    //     mainSelector: ".exact",
-    //     childrenSelector: [{ key: "word", selector: "div", type: "html" }],
-    //   });
-    // console.log(data);
-    // copy_list[index].classes = { tooltip: "noPaddingTooltip" };
-    // copy_list[index].content = <DictionaryCard html_data={data} />;
-    // }
-    setOpenList([...copy_list]);
+    if (copy_list[index].is_open != event) {
+      copy_list[index].is_open = event;
+      setOpenList([...copy_list]);
+    }
   }
   const onKeyPress = (e) => {
     if (dynamicColor) {
@@ -123,7 +112,11 @@ export default function TextView(props) {
             <span>
               <Tooltip
                 key={"html_tool_" + index}
-                open={open_list[index].is_open ?? ""}
+                open={
+                  index < open_list.length
+                    ? open_list[index].is_open
+                    : false ?? ""
+                }
                 onClick={(event) => {
                   handleWordClick(true, index, true, word);
                   setCurWord(word);
@@ -136,11 +129,13 @@ export default function TextView(props) {
                 onMouseLeave={() => {
                   handleWordClick(true, index, false, word);
                 }}
-                title={open_list[index].content}
+                title={index < open_list.length ? open_list[index].content : ""}
                 enterDelay={100}
                 leaveDelay={0}
                 style={{ padding: 0, color: getColor(word) }}
-                classes={open_list[index].classes}
+                classes={
+                  index < open_list.length ? open_list[index].classes : {}
+                }
               >
                 <a>
                   {word.indexOf(" ") !== -1 ? (
