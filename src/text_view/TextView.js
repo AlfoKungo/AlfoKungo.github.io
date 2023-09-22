@@ -193,7 +193,7 @@ export default function TextView(props) {
                             : ""}
                         </div>
                       ) : (
-                        ""
+                        " "
                       )}
 
                       {word}
