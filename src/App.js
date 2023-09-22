@@ -1,5 +1,5 @@
 import "./App.css";
-
+import { useState, useEffect } from "react";
 import Translate from "./questions/Translate";
 import { Card, CardContent, Typography } from "@mui/material";
 import Box from "@mui/material/Box";

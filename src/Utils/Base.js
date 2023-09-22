@@ -34,3 +34,7 @@ export function semi_semi_clean_answer(answer) {
 export function check_match(right_answer, input_answer) {
   return clean_answer(input_answer) === clean_answer(right_answer);
 }
+
+export function clean_word(word) {
+  return word.toLowerCase().replace(/^[,]+|[,]+$/g, "");
+}

@@ -1,6 +1,8 @@
 import { useState, Fragment } from "react";
 import Switch from "@mui/material/Switch";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import axios from "axios";
+import { clean_word } from "../Utils/Base";
 
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -8,7 +10,8 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
-import scrapeHtmlWeb from "../Utils/scrape-html-web";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
 import DictionaryCard from "./DictionaryCard";
 const bull = (
   <Box
@@ -49,13 +52,13 @@ export default function TextView(props) {
       classes: {},
     }));
   }
-  const style = { fontSize: "24px" };
+  const style = { fontSize: "24px", lineHeight: "1.75" };
   const theme = createTheme({
     components: {
       MuiTooltip: {
         styleOverrides: {
           tooltip: {
-            fontSize: "1.5rem", // Adjust this value as needed
+            fontSize: "1.5rem",
           },
         },
       },
@@ -74,20 +77,47 @@ export default function TextView(props) {
   }
   function getColor(word) {
     if (!dynamicColor || word.indexOf(" ") != -1) return "black";
-    console.log(words + ":" + props.words[word.toLowerCase()]);
     let word_obj = props.words[word.toLowerCase()];
     if (word_obj == undefined) {
       return "black";
     }
     return color_dict[word_obj.level];
   }
+  async function getWordMean(word) {
+    return await axios
+      .get(
+        "https://en.wiktionary.org/w/api.php?action=parse&format=json&prop=text|displaytitle&page=tomo"
+      )
+      // .get("http://localhost:8080?message=" + word.toLowerCase());
+
+      .then((response) => {
+        // setData(response.data);
+        // let copy_list = open_list;
+
+        return response.data;
+      })
+      .catch((error) => {
+        console.error("Error fetching the data", error);
+      });
+  }
   async function handleWordClick(is_left_click, index, event, word) {
     let copy_list = open_list;
-    if (copy_list[index].is_open != event) {
+    if (is_left_click) {
+      if (copy_list[index].is_open != event) {
+        copy_list[index].is_open = event;
+        copy_list[index].content =
+          trans_dict[word.toLowerCase().replace(/^[,]+|[,]+$/g, "")];
+        setOpenList([...copy_list]);
+      }
+    } else {
+      let word_trans = await getWordMean(word);
       copy_list[index].is_open = event;
+      // copy_list[index].classes = { tooltip: "noPaddingTooltip" };
+      copy_list[index].content = word_trans;
       setOpenList([...copy_list]);
     }
   }
+
   const onKeyPress = (e) => {
     if (dynamicColor) {
       if (e.key === "=" || e.key === ".") updateWordLevel(curWord, 1);
@@ -101,11 +131,22 @@ export default function TextView(props) {
   }
   return (
     <div tabIndex="0" onKeyDown={onKeyPress} style={{ outline: "none" }}>
-      <Switch
-        onChange={(event) => setChecked(event.target.checked)}
-        defaultChecked
+      <FormControlLabel
+        control={
+          <Switch
+            defaultChecked
+            onChange={(event) => setChecked(event.target.checked)}
+          />
+        }
+        label="Show Meaning Only on Click"
       />
-      <Switch onChange={(event) => setDynamicColor(event.target.checked)} />
+      <FormControlLabel
+        control={
+          <Switch onChange={(event) => setDynamicColor(event.target.checked)} />
+        }
+        label="Show Levels"
+      />
+
       <ThemeProvider theme={theme}>
         <div style={style}>
           {words.map((word, index) => (
@@ -121,10 +162,10 @@ export default function TextView(props) {
                   handleWordClick(true, index, true, word);
                   setCurWord(word);
                 }}
-                // onContextMenu={(e) => {
-                //   e.preventDefault();
-                //   handleWordClick(false, index, true, word);
-                // }}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  handleWordClick(false, index, true, word);
+                }}
                 onMouseEnter={() => handleMouseEnter(index, true, word)}
                 onMouseLeave={() => {
                   handleWordClick(true, index, false, word);
@@ -144,7 +185,19 @@ export default function TextView(props) {
                       src={require("../lines.png")}
                     ></img>
                   ) : (
-                    word
+                    <div style={{ display: "inline", position: "relative" }}>
+                      {dynamicColor ? (
+                        <div className="textview-level">
+                          {props.words[clean_word(word)]
+                            ? props.words[clean_word(word)].level.toString()
+                            : ""}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {word}
+                    </div>
                   )}
                 </a>{" "}
               </Tooltip>
