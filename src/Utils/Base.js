@@ -18,16 +18,14 @@ export function semi_clean_answer(answer) {
     .replace(/[.,\/?#!$%\^&\*;:{}=\_`~()]/g, "")
     .replace(/\s{2,}/g, " ")
     .replace(/-/g, " ");
-  //   answer = answer.normalize("NFD").replace(/\p{Diacritic}/gu, "");
   return answer.trim().toLowerCase();
 }
 export function semi_semi_clean_answer(answer) {
   answer = answer
     .replace(/ *\([^)]*\) */g, "")
-    .replace(/[.\/?#!$%\^&\*;:{}=\_`~()]/g, "")
+    .replace(/[.\/#!$%\^&\*;:{}=\_`~()]/g, "")
     .replace(/\s{2,}/g, " ")
     .replace(/-/g, " ");
-  //   answer = answer.normalize("NFD").replace(/\p{Diacritic}/gu, "");
   return answer.trim().toLowerCase();
 }
 
@@ -36,5 +34,10 @@ export function check_match(right_answer, input_answer) {
 }
 
 export function clean_word(word) {
-  return word.toLowerCase().replace(/^[,]+|[,]+$/g, "");
+  if (word.indexOf(" ") === -1)
+    return word
+      .toLowerCase()
+      .replace(/^[\,?]+|[\,?]+$/g, "")
+      .trim();
+  else return semi_semi_clean_answer(word);
 }

@@ -105,8 +105,8 @@ export default function TextView(props) {
     if (is_left_click) {
       if (copy_list[index].is_open != event) {
         copy_list[index].is_open = event;
-        copy_list[index].content =
-          trans_dict[word.toLowerCase().replace(/^[,]+|[,]+$/g, "")];
+        let ff = clean_word(word);
+        copy_list[index].content = trans_dict[clean_word(word)];
         setOpenList([...copy_list]);
       }
     } else {
@@ -193,7 +193,7 @@ export default function TextView(props) {
                             : ""}
                         </div>
                       ) : (
-                        " "
+                        ""
                       )}
 
                       {word}

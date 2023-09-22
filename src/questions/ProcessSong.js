@@ -24,11 +24,11 @@ export function updateSong(song) {
 }
 
 export function getTranslation(words, tsong) {
-  const twords = tsong.split(".");
+  const twords = tsong.split("\n");
   let trans = {};
 
   for (let i = 0; i < twords.length; i++) {
-    trans[words[i]] = { translation: twords[i].replace("\n", ""), level: 0 };
+    trans[words[i]] = { translation: twords[i].replace(".", ""), level: 0 };
   }
   return trans;
 }
