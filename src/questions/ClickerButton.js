@@ -1,21 +1,18 @@
 import { useState } from "react";
-// import
+import { grey } from "@mui/material/colors";
+
 let in_line_delimeter;
 const switch_sides = true;
-
-// function know_it(id) {
-//   document.getElementById(id).style.backgroundColor = "green";
-// }
 
 export default function ClickerButton(props) {
   // let [card, setCard] = useState(props.card);
   let card = props.card;
+  let [que, ans] = card.split(";");
   let index = props.index;
   let id = "que" + index;
   let level = props.level;
   let onClick = props.onClick;
   // let level = 0;
-  in_line_delimeter = props.in_line_delimeter;
 
   const [flip, setFlip] = useState(false);
   // const [level, setLevel] = useState(_level);
@@ -24,17 +21,16 @@ export default function ClickerButton(props) {
     let d = document.querySelector("#" + id);
     if (d != null) d.classList.remove("clicker");
   }
-  let [que, ans] = card.split(in_line_delimeter);
   if (switch_sides) [que, ans] = [ans, que];
   const shadesOfGrey = [
     "#000000", // Black
-    "#404040", // Dark grey
-    "#606060", // Grey
+    "#616161", // Dark grey
+    "#757575", // Grey
     "#909090", // Light grey
     "#D3D3D3", // Lighter grey
     "#EEEEEE", // Lightest grey
   ];
-  // document.getElementById(que).addEventListener("contextmenu", e => e.preventDefault());
+
   return (
     <div
       className="click-button"

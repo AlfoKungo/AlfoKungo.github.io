@@ -5,22 +5,8 @@ import axios from "axios";
 import { clean_word } from "../Utils/Base";
 
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Box from "@mui/material/Box";
-import FormControlLabel from "@mui/material/FormControlLabel";
 
-import DictionaryCard from "./DictionaryCard";
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 export default function TextView(props) {
   const [checked, setChecked] = useState(true);
@@ -66,8 +52,8 @@ export default function TextView(props) {
   });
   const color_dict = [
     "#000000", // Black
-    "#404040", // Dark grey
-    "#606060", // Grey
+    "#616161", // Dark grey
+    "#757575", // Grey
     "#909090", // Light grey
     "#D3D3D3", // Lighter grey
     "#EEEEEE", // Lightest grey

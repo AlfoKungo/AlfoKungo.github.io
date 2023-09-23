@@ -5,19 +5,16 @@ import Tooltip from "@mui/material/Tooltip";
 import yaml from "js-yaml";
 import MainTabs from "../Utils/MainTabs";
 
-import Ciicker, { SONG_SPLIT, NAME_SONG_SPLIT } from "./Clicker";
-import TextView from "../text_view/TextView";
-
 let to_copy = "";
 let data_obj = { words: {}, songs: {} };
 export default function Translate(props) {
-  const [sets, setSets] = useState("");
+  const [sets, setSets] = useState([]);
   const [words, setWords] = useState({});
   const [songs, setSongs] = useState({});
   const [song_name, setSongName] = useState("");
 
   const [org_text, setOrgText] = useState("");
-  const [extra_songs_raw, setExtraSongsRaw] = useState("");
+
   const [show_save, setShowSave] = useState(true);
   const [show_reorg, setShowReorg] = useState(true);
 
@@ -166,14 +163,11 @@ export default function Translate(props) {
           <MainTabs
             terms={sets}
             text={org_text}
-            // levels={levels}
             words={words}
-            extra_songs={extra_songs_raw}
             show_save={show_save}
             show_reorg={show_reorg}
             handle_reorg={handleReorganize}
             handleLevel={handleLevel}
-            in_line_delimeter={";"}
           />
         </div>
       ) : (

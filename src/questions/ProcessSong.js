@@ -40,7 +40,7 @@ export function createSets(words, translations) {
     if (translations[w] === undefined) {
       console.log("g");
     }
-    set.push(words[i] + ";" + translations[words[i]].translation);
+    set.push(words[i]);
   }
   return set;
 }

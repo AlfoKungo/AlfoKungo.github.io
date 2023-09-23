@@ -151,6 +151,14 @@ ul{
   left: 30%;
   top: -13px;
 }
+.write-level {
+  font-size: 45%;
+  padding: 0;
+  color: #94e3f9;
+  position: absolute;
+  left: 0%;
+  top: -13px;
+}
 .click-card {
   outline: none;
 }
