@@ -3,22 +3,26 @@ import { useState, useRef } from "react";
 import { green } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
 import { clean_word } from "../Utils/Base";
+import Slider from "@mui/material/Slider";
 
 export default function WriteQuestion(props) {
   const inputRef = useRef();
+  const [slider, setSlider] = useState([0, 2]);
   const [text, setText] = useState("");
   const [terms, setTerms] = useState(props.terms);
-  const [keysWithoutSpace, setKeysWithoutSpace] = useState(
+  const [keys, setKeys] = useState(
     terms.filter((key) => !key.includes(" ")).sort(() => Math.random() - 0.5)
   );
   if (JSON.stringify(terms) != JSON.stringify(props.terms)) {
     setTerms(props.terms);
-    setKeysWithoutSpace(
-      terms.filter((key) => !key.includes(" ")).sort(() => Math.random() - 0.5)
+    setKeys(
+      props.terms
+        .filter((key) => !key.includes(" "))
+        .sort(() => Math.random() - 0.5)
     );
   }
   const [wordInd, setWordInd] = useState(0);
-  let word = keysWithoutSpace[wordInd];
+  let word = keys[wordInd];
   const [isError, setIsError] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   function rightAnswer() {
@@ -36,7 +40,7 @@ export default function WriteQuestion(props) {
           setIsError(false);
           rightAnswer();
         } else {
-          setWordInd((wordInd + 1) % keysWithoutSpace.length);
+          setWordInd((wordInd + 1) % keys.length);
           setIsError(false);
           setIsCorrect(false);
           setText("");
@@ -109,6 +113,27 @@ export default function WriteQuestion(props) {
         }}
         helperText={isError ? "Incorrect" : false}
         className={isCorrect ? "correct" : ""}
+      />
+      <div> </div>
+      <div> </div>
+      <div> </div>
+      <Slider
+        getAriaLabel={() => "Levels range"}
+        value={slider}
+        onChange={(event, newValue) => {
+          setSlider(newValue);
+          props.handleLevelsRange(newValue[0], newValue[1]);
+        }}
+        step={1}
+        style={{
+          color: "#5fdeab", // Main color
+        }}
+        thumbColor="inherit"
+        valueLabelDisplay="auto"
+        min={0}
+        max={6}
+        marks
+        sx={{ marginLeft: 5, marginTop: 5, width: "30%" }}
       />
     </div>
   );

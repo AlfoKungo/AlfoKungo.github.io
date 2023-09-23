@@ -17,6 +17,7 @@ export default function Translate(props) {
 
   const [show_save, setShowSave] = useState(true);
   const [show_reorg, setShowReorg] = useState(true);
+  const [levelsRange, setLevelsRange] = useState([0, 2]);
 
   const handleMessageChange = (event) => {
     setOrgText(event.target.value);
@@ -28,6 +29,9 @@ export default function Translate(props) {
     data_obj["words"] = Object.assign({}, trans, data_obj["words"]);
     setWords(Object.assign({}, trans, data_obj["words"]));
   };
+  function handleLevelsRange(l_min, l_max) {
+    setLevelsRange([l_min, l_max]);
+  }
 
   const handleSongChosen = (key) => {
     let temp_sets = createSets(
@@ -39,13 +43,11 @@ export default function Translate(props) {
     setShowSave(false);
   };
   const handleRandomWords = (seed) => {
-    // const keysWithDesiredValues = Object.keys(levels).filter(
-    //   (key) => levels[key] === 0 || levels[key] === 1 || levels[key] === 2
-    // );
     const filteredKeys = Object.keys(words).filter(
       (key) =>
         key.indexOf(" ") === -1 &&
-        (words[key].level === 0 || words[key].level === 1)
+        words[key].level >= levelsRange[0] &&
+        words[key].level <= levelsRange[1]
     );
 
     const rng = seedrandom(seed); // Create a new seeded random generator
@@ -56,13 +58,7 @@ export default function Translate(props) {
     }
 
     const random50Keys = filteredKeys.slice(0, 50);
-    let new_sets = [];
-    for (let k in random50Keys) {
-      new_sets.push(
-        random50Keys[k] + ";" + words[random50Keys[k]]["translation"]
-      );
-    }
-    setSets(new_sets);
+    setSets(random50Keys);
     setShowSave(false);
     setShowReorg(true);
   };
@@ -73,7 +69,6 @@ export default function Translate(props) {
       [new_sets[i], new_sets[j]] = [new_sets[j], new_sets[i]]; // swap
     }
     setSets(new_sets);
-    console.log(sets);
   };
   function downloadYamlFile() {
     if (song_name !== "") {
@@ -168,6 +163,7 @@ export default function Translate(props) {
             show_reorg={show_reorg}
             handle_reorg={handleReorganize}
             handleLevel={handleLevel}
+            handleLevelsRange={handleLevelsRange}
           />
         </div>
       ) : (

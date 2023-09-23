@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import axios from "axios";
 import { clean_word } from "../Utils/Base";
 
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 
 import FormControlLabel from "@mui/material/FormControlLabel";
 
@@ -12,11 +12,6 @@ export default function TextView(props) {
   const [checked, setChecked] = useState(true);
   const [dynamicColor, setDynamicColor] = useState(false);
   const [curWord, setCurWord] = useState("");
-  // const trans_dict = props.terms.reduce((acc, item) => {
-  //   const [key, value] = item.split(";");
-  //   acc[key] = value.trim();
-  //   return acc;
-  // }, {});
 
   let lines = props.text.split("\n");
 

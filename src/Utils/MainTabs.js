@@ -82,6 +82,7 @@ export default function MainTabs(props) {
           show_reorg={props.show_reorg}
           handle_reorg={props.handle_reorg}
           handleLevel={props.handleLevel}
+          handleLevelsRange={props.handleLevelsRange}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
@@ -102,6 +103,7 @@ export default function MainTabs(props) {
           show_reorg={props.show_reorg}
           handle_reorg={props.handle_reorg}
           handleLevel={props.handleLevel}
+          handleLevelsRange={props.handleLevelsRange}
         />
       </CustomTabPanel>
     </Box>

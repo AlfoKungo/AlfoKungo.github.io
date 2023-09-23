@@ -97,6 +97,7 @@ export default function Clicker(props) {
         value={slider}
         onChange={(event, newValue) => {
           setSlider(newValue);
+          props.handleLevelsRange(newValue[0], newValue[1]);
         }}
         step={1}
         style={{
