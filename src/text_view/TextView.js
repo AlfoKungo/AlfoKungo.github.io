@@ -11,6 +11,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 export default function TextView(props) {
   const [checked, setChecked] = useState(true);
   const [dynamicColor, setDynamicColor] = useState(false);
+  const [showLevels, setShowLevels] = useState(false);
   const [curWord, setCurWord] = useState("");
 
   let lines = props.text.split("\n");
@@ -104,7 +105,7 @@ export default function TextView(props) {
   }
 
   const onKeyPress = (e) => {
-    if (dynamicColor) {
+    if (dynamicColor || showLevels) {
       if (e.key === "=" || e.key === ".") updateWordLevel(curWord, 1);
       if (e.key === "-" || e.key === ",") updateWordLevel(curWord, -1);
     }
@@ -128,6 +129,12 @@ export default function TextView(props) {
       <FormControlLabel
         control={
           <Switch onChange={(event) => setDynamicColor(event.target.checked)} />
+        }
+        label="Dynamic Color"
+      />
+      <FormControlLabel
+        control={
+          <Switch onChange={(event) => setShowLevels(event.target.checked)} />
         }
         label="Show Levels"
       />
@@ -171,7 +178,7 @@ export default function TextView(props) {
                     ></img>
                   ) : (
                     <div style={{ display: "inline", position: "relative" }}>
-                      {dynamicColor ? (
+                      {showLevels ? (
                         <div className="textview-level">
                           {props.words[clean_word(word)]
                             ? props.words[clean_word(word)].level.toString()

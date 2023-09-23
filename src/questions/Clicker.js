@@ -4,7 +4,7 @@ import Slider from "@mui/material/Slider";
 import { clean_word } from "../Utils/Base";
 
 export default function Clicker(props) {
-  const [slider, setSlider] = useState([0, 2]);
+  const [slider, setSlider] = useState(props.levelsRange);
   const [updater, setUpdater] = useState({});
 
   const [terms, setTerms] = useState(props.terms);

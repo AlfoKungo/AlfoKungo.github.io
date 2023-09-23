@@ -82,6 +82,7 @@ export default function MainTabs(props) {
           show_reorg={props.show_reorg}
           handle_reorg={props.handle_reorg}
           handleLevel={props.handleLevel}
+          levelsRange={props.levelsRange}
           handleLevelsRange={props.handleLevelsRange}
         />
       </CustomTabPanel>
@@ -103,6 +104,7 @@ export default function MainTabs(props) {
           show_reorg={props.show_reorg}
           handle_reorg={props.handle_reorg}
           handleLevel={props.handleLevel}
+          levelsRange={props.levelsRange}
           handleLevelsRange={props.handleLevelsRange}
         />
       </CustomTabPanel>

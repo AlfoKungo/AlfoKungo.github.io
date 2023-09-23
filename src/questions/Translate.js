@@ -163,6 +163,7 @@ export default function Translate(props) {
             show_reorg={show_reorg}
             handle_reorg={handleReorganize}
             handleLevel={handleLevel}
+            levelsRange={levelsRange}
             handleLevelsRange={handleLevelsRange}
           />
         </div>

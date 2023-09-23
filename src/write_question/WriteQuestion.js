@@ -7,7 +7,7 @@ import Slider from "@mui/material/Slider";
 
 export default function WriteQuestion(props) {
   const inputRef = useRef();
-  const [slider, setSlider] = useState([0, 2]);
+  const [slider, setSlider] = useState(props.levelsRange);
   const [text, setText] = useState("");
   const [terms, setTerms] = useState(props.terms);
   const [keys, setKeys] = useState(
