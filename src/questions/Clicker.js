@@ -78,7 +78,8 @@ export default function Clicker(props) {
           {terms.map((card, index) => {
             return (
               <ClickerButton
-                card={card + ";" + props.words[clean_word(card)].translation}
+                que={card}
+                ans={props.words[clean_word(card)].translation}
                 index={index}
                 key={card}
                 level={props.words[clean_word(card)].level}

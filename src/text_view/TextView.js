@@ -12,11 +12,11 @@ export default function TextView(props) {
   const [checked, setChecked] = useState(true);
   const [dynamicColor, setDynamicColor] = useState(false);
   const [curWord, setCurWord] = useState("");
-  const trans_dict = props.terms.reduce((acc, item) => {
-    const [key, value] = item.split(";");
-    acc[key] = value.trim();
-    return acc;
-  }, {});
+  // const trans_dict = props.terms.reduce((acc, item) => {
+  //   const [key, value] = item.split(";");
+  //   acc[key] = value.trim();
+  //   return acc;
+  // }, {});
 
   let lines = props.text.split("\n");
 
@@ -34,7 +34,10 @@ export default function TextView(props) {
   function generateOpenList(words) {
     return Array.from({ length: words.length }, (_, i) => ({
       is_open: false,
-      content: trans_dict[words[i].toLowerCase().replace(/^[,]+|[,]+$/g, "")],
+      content:
+        props.words[clean_word(words[i])] == undefined
+          ? ""
+          : props.words[clean_word(words[i])].translation,
       classes: {},
     }));
   }
@@ -92,7 +95,8 @@ export default function TextView(props) {
       if (copy_list[index].is_open != event) {
         copy_list[index].is_open = event;
         let ff = clean_word(word);
-        copy_list[index].content = trans_dict[clean_word(word)];
+        copy_list[index].content = props.words[clean_word(word)].translation;
+
         setOpenList([...copy_list]);
       }
     } else {

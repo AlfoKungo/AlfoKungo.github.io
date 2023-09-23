@@ -7,12 +7,16 @@ import { clean_word } from "../Utils/Base";
 export default function WriteQuestion(props) {
   const inputRef = useRef();
   const [text, setText] = useState("");
-
+  const [terms, setTerms] = useState(props.terms);
   const [keysWithoutSpace, setKeysWithoutSpace] = useState(
-    Object.keys(props.words)
-      .filter((key) => !key.includes(" "))
-      .sort(() => Math.random() - 0.5)
+    terms.filter((key) => !key.includes(" ")).sort(() => Math.random() - 0.5)
   );
+  if (JSON.stringify(terms) != JSON.stringify(props.terms)) {
+    setTerms(props.terms);
+    setKeysWithoutSpace(
+      terms.filter((key) => !key.includes(" ")).sort(() => Math.random() - 0.5)
+    );
+  }
   const [wordInd, setWordInd] = useState(0);
   let word = keysWithoutSpace[wordInd];
   const [isError, setIsError] = useState(false);

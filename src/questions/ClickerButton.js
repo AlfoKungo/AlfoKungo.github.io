@@ -1,21 +1,16 @@
 import { useState } from "react";
-import { grey } from "@mui/material/colors";
 
-let in_line_delimeter;
-const switch_sides = true;
+const switch_sides = false;
 
 export default function ClickerButton(props) {
-  // let [card, setCard] = useState(props.card);
-  let card = props.card;
-  let [que, ans] = card.split(";");
+  const [que, ans] = [props.que, props.ans];
   let index = props.index;
   let id = "que" + index;
   let level = props.level;
   let onClick = props.onClick;
-  // let level = 0;
 
   const [flip, setFlip] = useState(false);
-  // const [level, setLevel] = useState(_level);
+
   function flip_back(id) {
     setFlip(false);
     let d = document.querySelector("#" + id);
@@ -23,12 +18,12 @@ export default function ClickerButton(props) {
   }
   if (switch_sides) [que, ans] = [ans, que];
   const shadesOfGrey = [
-    "#000000", // Black
-    "#616161", // Dark grey
-    "#757575", // Grey
-    "#909090", // Light grey
-    "#D3D3D3", // Lighter grey
-    "#EEEEEE", // Lightest grey
+    "#000000",
+    "#616161",
+    "#757575",
+    "#909090",
+    "#D3D3D3",
+    "#EEEEEE",
   ];
 
   return (
@@ -57,7 +52,7 @@ export default function ClickerButton(props) {
         className=""
       >
         <div className="clicker-level">{level}</div>
-        {flip ? que : ans}
+        {flip ? ans : que}
       </li>
     </div>
   );
