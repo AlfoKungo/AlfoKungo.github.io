@@ -56,7 +56,10 @@ export default function MainTabs(props) {
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          // aria-label="basic tabs example"
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="scrollable auto tabs example"
           centered
         >
           <Tab
