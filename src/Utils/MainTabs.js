@@ -52,15 +52,13 @@ export default function MainTabs(props) {
 
   return (
     <Box>
-      <Box>
+      <Box display="flex" justifyContent="center" width="100%">
         <Tabs
           value={value}
           onChange={handleChange}
-          // aria-label="basic tabs example"
           variant="scrollable"
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
-          centered
         >
           <Tab
             label="Boxes"
