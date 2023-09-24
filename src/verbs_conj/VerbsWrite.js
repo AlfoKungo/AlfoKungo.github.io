@@ -1,54 +1,34 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { blue } from "@mui/material/colors";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Paper, TextField, Typography } from "@mui/material";
-import { theme, andar_elem, MOODS, pickRandomKey } from "./VerbsUtils.js";
+import { theme, pickRandomKey, get_table } from "./VerbsUtils.js";
 import { green } from "@mui/material/colors";
+import { all } from "axios";
 
-// let moods = { ...MOODS };
-let moods = MOODS;
-function fillEmptyStrings(obj, values) {
-  let index = 0; // to keep track of the list index
-
-  function recursiveFill(obj) {
-    if (index >= values.length) return; // stop if all values are used
-    for (const key in obj) {
-      if (typeof obj[key] === "object") {
-        recursiveFill(obj[key]); // recursively fill for nested objects
-      } else if (obj[key] === "") {
-        obj[key] = values[index]; // replace empty string with value from list
-        index++; // move to the next value in the list
-        if (index >= values.length) return; // stop if all values are used
-      }
-    }
-  }
-
-  recursiveFill(obj); // initiate the recursive fill
-}
+let remove_keys = ["indicative", "conditional", "subjunctive", "imperative"];
 export default function VerbsVerbs(props) {
   const [text, setText] = useState("");
+
   const [isError, setIsError] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [moods, setMoods] = useState({});
   const inputRef = useRef();
+  useEffect(() => {
+    const fetchData = async () => {
+      let _moods = await get_table("andar", "Portuguese");
+      if (Object.keys(_moods).length > 0) {
+        setMainVal(pickRandomKey(_moods, remove_keys));
+      }
+      setMoods(await get_table("andar", "Portuguese"));
+    };
+    fetchData();
+  }, []);
 
-  function parseHtml(htmlString) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlString, "text/html");
-    const spanElements = Array.from(
-      doc.querySelectorAll(".Latn:not(.mention)")
-    ).map((el) => {
-      return el.parentNode.innerText.trim();
-    });
-    return spanElements;
-  }
-
-  let ss = parseHtml(andar_elem);
-  fillEmptyStrings(moods, ss);
-  const [mainVal, setMainVal] = useState(pickRandomKey(moods));
+  const [mainVal, setMainVal] = useState(["", ""]);
   let [word, keys] = mainVal;
-  //   const [word, setWord] = useState(pickRandomKey(moods)[0]);
   function rightAnswer() {
     setIsCorrect(true);
   }
@@ -61,7 +41,7 @@ export default function VerbsVerbs(props) {
         setIsError(false);
         setIsCorrect(false);
         setText("");
-        setMainVal(pickRandomKey(moods));
+        setMainVal(pickRandomKey(moods, remove_keys));
       } else {
         if (inputRef.current.value == word) {
           rightAnswer();
@@ -71,18 +51,67 @@ export default function VerbsVerbs(props) {
       }
     }
   }
+  function recursiveButtons(dict, keys) {
+    if (keys === "" || Object.keys(dict) == 0 || dict == undefined)
+      return <div></div>;
+    let all_keys = keys.split(" ");
+    let key = all_keys[0];
+    let rest_keys = all_keys.slice(1).join(" ");
+    return (
+      <div>
+        <ButtonGroup
+          variant="contained"
+          aria-label="outlined primary button group"
+        >
+          {Object.entries(dict).map(([k, value]) => {
+            return (
+              <Button
+                disabled={remove_keys.includes(k)}
+                sx={{
+                  "&&.MuiButton-root": {
+                    "&:hover": {
+                      background: "none",
+                    },
+                  },
+                }}
+                color={key == k ? "secondary" : "primary"}
+              >
+                {k}
+              </Button>
+            );
+          })}
+        </ButtonGroup>
+        <div> </div>
+        {typeof dict[key] !== "string" ? (
+          recursiveButtons(dict[key], rest_keys)
+        ) : (
+          <div></div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div tabIndex="0" onKeyDown={onKeyPress} style={{ outline: "none" }}>
       <ThemeProvider theme={theme}>
         <div></div>
         <Paper
-          style={{ width: "20%", padding: 20, margin: "auto" }}
+          style={{
+            width: "20%",
+            paddingTop: 20,
+            paddingBottom: 15,
+            paddingRight: 15,
+            paddingLeft: 15,
+            margin: "auto",
+          }}
           elevation={10}
         >
           <Typography variant="h4" gutterBottom>
-            {keys.join(" ")}
+            {keys}
           </Typography>
         </Paper>
+        <div> </div>
+        {recursiveButtons(moods, keys)}
         <div> </div>
         {isError ? (
           <Typography variant="h5" gutterBottom>
@@ -97,52 +126,52 @@ export default function VerbsVerbs(props) {
         ) : (
           <div></div>
         )}
-        <div> </div>
-        <TextField
-          value={text}
-          error={isError}
-          onKeyDown={onKeyPress}
-          autoComplete="off"
-          onChange={(e) => setText(e.target.value)}
-          color={isCorrect ? "success" : false}
-          focused
-          id="outlined-basic"
-          inputRef={inputRef}
-          label=""
-          // variant="outlined"
-          style={{ fontSize: 50 }}
-          sx={{
+      </ThemeProvider>
+
+      <div> </div>
+      <TextField
+        value={text}
+        error={isError}
+        onKeyDown={onKeyPress}
+        autoComplete="off"
+        onChange={(e) => setText(e.target.value)}
+        color={isCorrect ? "success" : false}
+        focused
+        id="outlined-basic"
+        inputRef={inputRef}
+        label=""
+        style={{ fontSize: 50 }}
+        sx={{
+          "&.Mui-focused": {
+            backgroundColor: "white",
+          },
+          "& .MuiInputBase-input": {
+            backgroundColor: "white",
+          },
+          "&.correct": {
+            ".Mui-disabled": {
+              color: `${green[500]} !important`,
+              "& fieldset": {
+                borderColor: `${green[500]} !important`,
+              },
+            },
             "&.Mui-focused": {
-              backgroundColor: "white",
+              backgroundColor: `${green[50]} !important`,
             },
             "& .MuiInputBase-input": {
-              backgroundColor: "white",
+              backgroundColor: `${green[50]} !important`,
             },
-            "&.correct": {
-              ".Mui-disabled": {
-                color: `${green[500]} !important`,
-                "& fieldset": {
-                  borderColor: `${green[500]} !important`,
-                },
-              },
-              "&.Mui-focused": {
-                backgroundColor: `${green[50]} !important`,
-              },
-              "& .MuiInputBase-input": {
-                backgroundColor: `${green[50]} !important`,
-              },
-            },
-          }}
-          InputProps={{
-            style: { fontSize: "26px" },
-            readOnly: isCorrect || isError ? true : false,
-          }}
-          helperText={isError ? "Incorrect" : false}
-          className={isCorrect ? "correct" : ""}
-        />
-        <div></div>
-        <div> </div>
-      </ThemeProvider>
+          },
+        }}
+        InputProps={{
+          style: { fontSize: "26px" },
+          readOnly: isCorrect || isError ? true : false,
+        }}
+        helperText={isError ? "Incorrect" : false}
+        className={isCorrect ? "correct" : ""}
+      />
+      <div></div>
+      <div> </div>
     </div>
   );
 }
