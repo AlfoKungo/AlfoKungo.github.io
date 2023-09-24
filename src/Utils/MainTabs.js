@@ -8,7 +8,8 @@ import Ciicker from "../questions/Clicker";
 import TextView from "../text_view/TextView";
 import { Container } from "@mui/material";
 import WriteQuestion from "../write_question/WriteQuestion";
-
+import VerbsConj from "../verbs_conj/VerbsConj";
+import VerbsWrite from "../verbs_conj/VerbsWrite";
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -70,7 +71,17 @@ export default function MainTabs(props) {
           />
           <Tab
             label="Write"
-            {...a11yProps(1)}
+            {...a11yProps(2)}
+            sx={{ fontSize: "30px", borderBottom: 1, borderColor: "divider" }}
+          />
+          <Tab
+            label="Verbs Conj"
+            {...a11yProps(3)}
+            sx={{ fontSize: "30px", borderBottom: 1, borderColor: "divider" }}
+          />
+          <Tab
+            label="Verbs Write"
+            {...a11yProps(4)}
             sx={{ fontSize: "30px", borderBottom: 1, borderColor: "divider" }}
           />
         </Tabs>
@@ -98,6 +109,30 @@ export default function MainTabs(props) {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <WriteQuestion
+          terms={props.terms}
+          text={props.text}
+          words={props.words}
+          show_reorg={props.show_reorg}
+          handle_reorg={props.handle_reorg}
+          handleLevel={props.handleLevel}
+          levelsRange={props.levelsRange}
+          handleLevelsRange={props.handleLevelsRange}
+        />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        <VerbsConj
+          terms={props.terms}
+          text={props.text}
+          words={props.words}
+          show_reorg={props.show_reorg}
+          handle_reorg={props.handle_reorg}
+          handleLevel={props.handleLevel}
+          levelsRange={props.levelsRange}
+          handleLevelsRange={props.handleLevelsRange}
+        />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={4}>
+        <VerbsWrite
           terms={props.terms}
           text={props.text}
           words={props.words}

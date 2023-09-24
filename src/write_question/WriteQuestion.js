@@ -1,4 +1,4 @@
-import { TextField, Typography } from "@mui/material";
+import { Paper, TextField, Typography } from "@mui/material";
 import { useState, useRef } from "react";
 import { green } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
@@ -33,6 +33,20 @@ export default function WriteQuestion(props) {
     setIsError(true);
     props.handleLevel(clean_word(word), -1);
   }
+  function nextWord() {
+    let next_word = (wordInd + 1) % keys.length;
+    while (true) {
+      if (props.words[keys[next_word]] === undefined) {
+        console.log("gal");
+      }
+
+      if (props.words[keys[next_word]].level < slider[1]) {
+        setWordInd(next_word);
+        return;
+      }
+      next_word = (next_word + 1) % keys.length;
+    }
+  }
   function onKeyPress(event) {
     if (event.code == "Enter") {
       if (isCorrect || isError) {
@@ -40,7 +54,7 @@ export default function WriteQuestion(props) {
           setIsError(false);
           rightAnswer();
         } else {
-          setWordInd((wordInd + 1) % keys.length);
+          nextWord();
           setIsError(false);
           setIsCorrect(false);
           setText("");
@@ -59,18 +73,36 @@ export default function WriteQuestion(props) {
   return (
     <div
       tabIndex="0"
-      style={{ outline: "none", display: "inline", position: "relative" }}
+      style={{
+        outline: "none",
+        display: "inline",
+        position: "relative",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
-      <Typography variant="h4" gutterBottom>
-        <div className="write-level">
-          {props.words[clean_word(word)]
-            ? props.words[clean_word(word)].level.toString()
-            : ""}
-        </div>
-        {word}
-      </Typography>
+      {" "}
+      <Paper
+        style={{
+          width: 300,
+          paddingTop: 20,
+          paddingBottom: 15,
+          margin: "auto",
+        }}
+        elevation={10}
+      >
+        <Typography variant="h4" gutterBottom>
+          <div className="write-level">
+            {props.words[clean_word(word)]
+              ? props.words[clean_word(word)].level.toString()
+              : ""}
+          </div>
+          {word}
+        </Typography>
+      </Paper>
       {isError ? (
         <Typography variant="h5" gutterBottom>
+          <div> </div>
           correct answer is:{" "}
           <h3 style={{ display: "inline" }}>
             <b>
@@ -89,21 +121,32 @@ export default function WriteQuestion(props) {
         onKeyDown={onKeyPress}
         autoComplete="off"
         onChange={(e) => setText(e.target.value)}
-        // disabled={isError || isCorrect}
         color={isCorrect ? "success" : false}
-        focused={true}
+        focused
         id="outlined-basic"
         inputRef={inputRef}
         label=""
-        variant="outlined"
+        // variant="outlined"
         style={{ fontSize: 50 }}
         sx={{
+          "&.Mui-focused": {
+            backgroundColor: "white",
+          },
+          "& .MuiInputBase-input": {
+            backgroundColor: "white",
+          },
           "&.correct": {
             ".Mui-disabled": {
               color: `${green[500]} !important`,
               "& fieldset": {
                 borderColor: `${green[500]} !important`,
               },
+            },
+            "&.Mui-focused": {
+              backgroundColor: `${green[50]} !important`,
+            },
+            "& .MuiInputBase-input": {
+              backgroundColor: `${green[50]} !important`,
             },
           },
         }}
