@@ -164,6 +164,14 @@ export default function WriteQuestion(props) {
       />
       <div> </div>
       <div> </div>
+      <button className="button-pretty-1" onClick={props.handle_reorg}>
+        Reorganize
+        <img
+          className="random-logo"
+          src={require("../backlog.png")}
+          alt="randomLogo"
+        ></img>
+      </button>
       <div> </div>
       <Slider
         getAriaLabel={() => "Levels range"}

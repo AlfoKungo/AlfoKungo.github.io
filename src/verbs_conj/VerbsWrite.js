@@ -47,6 +47,7 @@ const verbs_list = [
   "ir",
   "ser",
   "pensar",
+  "tomar",
 ];
 export default function VerbsVerbs(props) {
   const classes = useStyles();
