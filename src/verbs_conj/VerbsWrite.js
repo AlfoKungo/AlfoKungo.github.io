@@ -2,14 +2,24 @@ import { useState, useRef, useEffect } from "react";
 import { blue } from "@mui/material/colors";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import Slider from "@mui/material/Slider";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Paper, TextField, Typography } from "@mui/material";
-import { theme, pickRandomKey, get_table } from "./VerbsUtils.js";
+import {
+  theme,
+  pickRandomKey,
+  get_table,
+  getVerbsAmount,
+} from "./VerbsUtils.js";
 import { green } from "@mui/material/colors";
 import { all } from "axios";
+import { clean_answer } from "../Utils/Base.js";
 
-let remove_keys = ["indicative", "conditional", "subjunctive", "imperative"];
+let remove_keys = ["conditional", "subjunctive", "imperative"];
 export default function VerbsVerbs(props) {
+  const [slider, setSlider] = useState([0, 22]);
+
   const [text, setText] = useState("");
 
   const [isError, setIsError] = useState(false);
@@ -18,15 +28,18 @@ export default function VerbsVerbs(props) {
   const inputRef = useRef();
   useEffect(() => {
     const fetchData = async () => {
-      let _moods = await get_table("andar", "Portuguese");
-      if (Object.keys(_moods).length > 0) {
-        setMainVal(pickRandomKey(_moods, remove_keys));
-      }
-      setMoods(await get_table("andar", "Portuguese"));
+      if (Object.keys(moods).length == 0) {
+        let _moods = await get_table("falar", "Portuguese");
+        if (Object.keys(_moods).length > 0) {
+          setMainVal(pickRandomKey(_moods, slider, remove_keys));
+        }
+        setMoods(await get_table("falar", "Portuguese"));
+      } else setMainVal(pickRandomKey(moods, slider, remove_keys));
     };
     fetchData();
   }, []);
 
+  let verbs_amount = getVerbsAmount(moods);
   const [mainVal, setMainVal] = useState(["", ""]);
   let [word, keys] = mainVal;
   function rightAnswer() {
@@ -41,9 +54,9 @@ export default function VerbsVerbs(props) {
         setIsError(false);
         setIsCorrect(false);
         setText("");
-        setMainVal(pickRandomKey(moods, remove_keys));
+        setMainVal(pickRandomKey(moods, slider, remove_keys));
       } else {
-        if (inputRef.current.value == word) {
+        if (clean_answer(inputRef.current.value) == clean_answer(word)) {
           rightAnswer();
         } else {
           wrongAnswer();
@@ -52,8 +65,7 @@ export default function VerbsVerbs(props) {
     }
   }
   function recursiveButtons(dict, keys) {
-    if (keys === "" || Object.keys(dict) == 0 || dict == undefined)
-      return <div></div>;
+    if (keys === "" || Object.keys(dict) == 0) return <div></div>;
     let all_keys = keys.split(" ");
     let key = all_keys[0];
     let rest_keys = all_keys.slice(1).join(" ");
@@ -66,7 +78,7 @@ export default function VerbsVerbs(props) {
           {Object.entries(dict).map(([k, value]) => {
             return (
               <Button
-                disabled={remove_keys.includes(k)}
+                // disabled={remove_keys.includes(k)}
                 sx={{
                   "&&.MuiButton-root": {
                     "&:hover": {
@@ -171,6 +183,22 @@ export default function VerbsVerbs(props) {
         className={isCorrect ? "correct" : ""}
       />
       <div></div>
+      <div> </div>
+      <Slider
+        getAriaLabel={() => "Levels range"}
+        value={slider}
+        onChange={(event, newValue) => {
+          setSlider(newValue);
+        }}
+        step={1}
+        style={{
+          color: "#4dc3ff", // Main color
+        }}
+        valueLabelDisplay="on"
+        min={0}
+        max={verbs_amount}
+        sx={{ marginLeft: 5, marginTop: 5, width: "30%", minWidth: 300 }}
+      />
       <div> </div>
     </div>
   );

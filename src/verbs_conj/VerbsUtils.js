@@ -31,9 +31,13 @@ function flattenObj(obj, remove_keys, pre_key = "", arr = []) {
   }
   return arr;
 }
-export function pickRandomKey(obj, limit_keys = []) {
-  let flat = flattenObj(obj, limit_keys);
+export function pickRandomKey(obj, amount_limit, limit_keys = []) {
+  let flat = flattenObj(obj, []);
+  flat = flat.slice(amount_limit[0], amount_limit[1]);
   return flat[Math.floor(Math.random() * flat.length)];
+}
+export function getVerbsAmount(obj) {
+  return flattenObj(obj, []).length;
 }
 async function getWordMean(word) {
   return await axios
@@ -151,7 +155,7 @@ export const MOODS = {
     impersonal: "",
     personal: {
       singular: { "first-person": "", "second-person": "", "third-person": "" },
-      plural: { " first-person": "", "second-person": "", "third-person": "" },
+      plural: { "first-person": "", "second-person": "", "third-person": "" },
     },
   },
   gerud: "",
@@ -161,7 +165,7 @@ export const MOODS = {
   },
   indicative: {
     present: {
-      singular: { first: "", "second-person": "", "third-person": "" },
+      singular: { "first-person": "", "second-person": "", "third-person": "" },
       plural: { "first-person": "", "second-person": "", "third-person": "" },
     },
     imperfect: {

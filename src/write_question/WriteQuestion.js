@@ -61,7 +61,8 @@ export default function WriteQuestion(props) {
         }
       } else {
         if (
-          inputRef.current.value == clean_word(props.words[word].translation)
+          clean_word(inputRef.current.value) ==
+          clean_word(props.words[word].translation)
         ) {
           rightAnswer();
         } else {
