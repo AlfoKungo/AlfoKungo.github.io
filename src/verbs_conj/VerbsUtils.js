@@ -31,7 +31,7 @@ function flattenObj(obj, remove_keys, pre_key = "", arr = []) {
   }
   return arr;
 }
-export function pickRandomKey(obj, amount_limit, limit_keys = []) {
+export function pickRandomKey(obj, amount_limit) {
   let flat = flattenObj(obj, []);
   flat = flat.slice(amount_limit[0], amount_limit[1]);
   return flat[Math.floor(Math.random() * flat.length)];
@@ -39,6 +39,10 @@ export function pickRandomKey(obj, amount_limit, limit_keys = []) {
 export function getVerbsAmount(obj) {
   return flattenObj(obj, []).length;
 }
+export function getSpecByInd(obj, ind) {
+  return flattenObj(obj, [])[ind];
+}
+
 async function getWordMean(word) {
   return await axios
     .get(
@@ -106,11 +110,15 @@ function HebrewTableParser(htmlString) {
 function parseHtml(htmlString) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlString, "text/html");
-  const spanElements = Array.from(
-    doc.querySelectorAll(".Latn:not(.mention)")
+  let spanElements = Array.from(
+    doc.querySelectorAll("td")
+    // doc.querySelectorAll(".Latn:not(.mention)")
   ).map((el) => {
-    return el.parentNode.innerText.trim();
+    return el.innerText.trim();
+    // return el.parentElement.innerText.trim();
   });
+  spanElements = spanElements.filter((val) => val != "");
+  spanElements = spanElements.map((val) => val.split("1")[0]);
   return spanElements;
 }
 
@@ -174,12 +182,7 @@ export const MOODS = {
     },
     preterite: {
       singular: { "first-person": "", "second-person": "", "third-person": "" },
-      plural: {
-        "first-person(br)": "",
-        "first-person(pt)": "",
-        "second-person": "",
-        "third-person": "",
-      },
+      plural: { "first-person": "", "second-person": "", "third-person": "" },
     },
     pluperfect: {
       singular: { "first-person": "", "second-person": "", "third-person": "" },

@@ -31,7 +31,7 @@ export default function WriteQuestion(props) {
   }
   function wrongAnswer() {
     setIsError(true);
-    props.handleLevel(clean_word(word), -1);
+    // props.handleLevel(clean_word(word), -1);
   }
   function nextWord() {
     let next_word = (wordInd + 1) % keys.length;
@@ -55,6 +55,7 @@ export default function WriteQuestion(props) {
           rightAnswer();
         } else {
           nextWord();
+          if (isError) props.handleLevel(clean_word(word), -1);
           setIsError(false);
           setIsCorrect(false);
           setText("");
@@ -95,7 +96,10 @@ export default function WriteQuestion(props) {
         <Typography variant="h4" gutterBottom>
           <div className="write-level">
             {props.words[clean_word(word)]
-              ? props.words[clean_word(word)].level.toString()
+              ? Math.max(
+                  props.words[clean_word(word)].level + (isError ? -1 : 0),
+                  0
+                ).toString()
               : ""}
           </div>
           {word}
