@@ -3,6 +3,19 @@ import { useState, useRef, useEffect } from "react";
 
 import axios from "axios";
 import { load } from "cheerio";
+export const verbs_list = [
+  "falar",
+  "andar",
+  "ficar",
+  "comer",
+  "vir",
+  "dormir",
+  "fazer",
+  "ir",
+  "ser",
+  "pensar",
+  "tomar",
+];
 export const theme = createTheme({
   palette: {
     primary: {

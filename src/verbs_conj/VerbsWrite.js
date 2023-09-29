@@ -22,6 +22,7 @@ import {
   get_table,
   getVerbsAmount,
   getSpecByInd,
+  verbs_list,
 } from "./VerbsUtils.js";
 import { green } from "@mui/material/colors";
 import { all } from "axios";
@@ -36,19 +37,7 @@ const useStyles = makeStyles({
     },
   },
 });
-const verbs_list = [
-  "falar",
-  "andar",
-  "ficar",
-  "comer",
-  "vir",
-  "dormir",
-  "fazer",
-  "ir",
-  "ser",
-  "pensar",
-  "tomar",
-];
+
 export default function VerbsVerbs(props) {
   const classes = useStyles();
 
