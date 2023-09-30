@@ -22,7 +22,8 @@ import {
   get_table,
   getVerbsAmount,
   getSpecByInd,
-  verbs_list,
+  r_verbs_list,
+  ir_verbs_list,
 } from "./VerbsUtils.js";
 import { green } from "@mui/material/colors";
 import { all } from "axios";
@@ -48,7 +49,7 @@ export default function VerbsVerbs(props) {
   const [isError, setIsError] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [moods, setMoods] = useState({});
-  const [verb, setVerb] = useState(verbs_list[0]);
+  const [verb, setVerb] = useState(r_verbs_list[0]);
   const inputRef = useRef();
   useEffect(() => {
     const fetchData = async () => {
@@ -148,7 +149,20 @@ export default function VerbsVerbs(props) {
               <MenuItem value={"all"} className={classes.menuItem}>
                 <b>All</b>
               </MenuItem>
-              {verbs_list.map((val, ind) => (
+              <InputLabel htmlFor="grouped-select" sx={{ marginLeft: 1 }}>
+                {" "}
+                Regular
+              </InputLabel>
+              {r_verbs_list.map((val, ind) => (
+                <MenuItem value={val} className={classes.menuItem}>
+                  {val.charAt(0).toUpperCase() + val.slice(1)}
+                </MenuItem>
+              ))}
+              <InputLabel htmlFor="grouped-select" sx={{ marginLeft: 1 }}>
+                {" "}
+                Irregular
+              </InputLabel>
+              {ir_verbs_list.map((val, ind) => (
                 <MenuItem value={val} className={classes.menuItem}>
                   {val.charAt(0).toUpperCase() + val.slice(1)}
                 </MenuItem>

@@ -3,18 +3,26 @@ import { useState, useRef, useEffect } from "react";
 
 import axios from "axios";
 import { load } from "cheerio";
-export const verbs_list = [
+export const r_verbs_list = [
   "falar",
   "andar",
   "ficar",
   "comer",
-  "vir",
   "dormir",
+  "pensar",
+  "tomar",
+];
+export const ir_verbs_list = [
+  "vir",
   "fazer",
   "ir",
   "ser",
-  "pensar",
-  "tomar",
+  "ter",
+  "dar",
+  "saber",
+  "poder",
+  "querer",
+  "estar",
 ];
 export const theme = createTheme({
   palette: {
@@ -158,7 +166,9 @@ function fillEmptyStrings(obj, values) {
 export async function get_table(verb, language) {
   let htmlString = await getWordMean(verb);
   let ind_pt = htmlString.indexOf(`id="${language}"`);
-  let ind_table_start = htmlString.slice(ind_pt).indexOf("<table") + ind_pt;
+  let ind_table_start =
+    htmlString.slice(ind_pt).indexOf('<table class="inflection-table"') +
+    ind_pt;
   let ind_table_end =
     htmlString.slice(ind_table_start).indexOf("</table") + ind_table_start;
   let table = htmlString.slice(ind_table_start, ind_table_end);
